@@ -3,7 +3,7 @@
 #include <tf2/impl/utils.h>
 #include <tf2/LinearMath/Quaternion.h>
 #include <tf2_ros/transform_broadcaster.h>
-#include <ackermann_msgs/AckermannDriveStamped.h>
+#include <ackermann_msgs/AckermannDrive.h>
 #include <nav_msgs/OccupancyGrid.h>
 #include <nav_msgs/Odometry.h>
 #include <sensor_msgs/LaserScan.h>
@@ -251,9 +251,9 @@ class RacecarSimulator {
       pose_callback(msg -> pose.pose);
     }
 
-    void drive_callback(const ackermann_msgs::AckermannDriveStamped & msg) {
-      set_speed(msg.drive.speed);
-      set_steering_angle(msg.drive.steering_angle, ros::Time::now());
+    void drive_callback(const ackermann_msgs::AckermannDrive & msg) {
+      set_speed(msg.speed);
+      set_steering_angle(msg.steering_angle, ros::Time::now());
     }
 
     void joy_callback(const sensor_msgs::Joy & msg) {
