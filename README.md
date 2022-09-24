@@ -15,7 +15,7 @@
 * 레포지토리 복제
     ```
     cd ~/catkin_ws/src
-    git clone https://github.com/mit-racecar/racecar_simulator.git
+    git clone https://github.com/jhforstudy/HEVEN_Hackathon.git
     ```
 
 * 패키지 빌드
