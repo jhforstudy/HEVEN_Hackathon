@@ -6,7 +6,7 @@ import time
 from database import Database
 from brain import Brain
 
-from ackermann_msgs.msg import AckermannDrive, AckermannDriveStamped
+from ackermann_msgs.msg import AckermannDrive
 
 CAR_ANGLE_VELOCITY = 1
 CAR_ACCELERATION = 1
@@ -27,13 +27,7 @@ def drive(curr_angle, curr_speed):
     float32 acceleration
     float32 jerk
     '''
-
-    # whole_msg = AckermannDriveStamped()
-    # # Header
-    # whole_msg.header.stamp = rospy.Time.now()
-    # whole_msg.header.frame_id = '/race_car'
-    # whole_msg.drive = control_msg
-    # AckermannDrive
+    
     control_msg = AckermannDrive()
     control_msg.steering_angle = curr_angle
     control_msg.steering_angle_velocity = CAR_ANGLE_VELOCITY
