@@ -36,3 +36,8 @@
     ```
     rosrun racecar_simulator main.py
     ```
+
+* 수동 조작 노드 실행 (시뮬레이터 실행 후)
+    ```
+    rosrun racecar_simulator teleop_keyboard.py
+    ```
