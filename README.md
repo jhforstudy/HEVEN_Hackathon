@@ -41,3 +41,24 @@
     ```
     rosrun racecar_simulator teleop_keyboard.py
     ```
+### 센서 값 호출 방법
+
+* Brain.py에서 다음과 같이 호출하여 사용할 수 있음
+    ```python
+    lidar_data = self.db.lidar_data
+    pose_data = self.db.pose_data
+    ```
+
+* LiDAR<br>
+    ```
+    변수명 : self.db.lidar_data
+    형태 : list[360]
+    값 설명 : 차량 전방, 우측을 기준으로 반시계방향으로 측정된 값
+    ```
+
+* pose (현재 차량의 global position)<br>
+    ```
+    변수명 : self.db.pose_data
+    형태 : list[3]
+    값 설명 : [map frame으로부터 차량의 x좌표, map frame으로부터 차량의 y좌표, yaw (degree)]
+    ```
