@@ -2,9 +2,12 @@
 
 import rospy
 import time
+import tf
+import math
 
 from database import Database
 from brain import Brain
+from tf.transformations import euler_from_quaternion
 
 from ackermann_msgs.msg import AckermannDrive
 
@@ -44,13 +47,19 @@ def main():
     # Initialize ROS rate & motor publisher
     rate = rospy.Rate(100)
     control_pub = rospy.Publisher('drive', AckermannDrive, queue_size=1)
-    rospy.loginfo("---Initializing mission manager---\n\n\n")
-    time.sleep(1)
-
-    rospy.loginfo("---Done. Start autonomous driving---\n\n\n")
+    # TF listener
+    listener = tf.TransformListener()
+    rospy.loginfo("Start autonomous driving---\n\n\n")
     time.sleep(1)
 
     while not rospy.is_shutdown():
+        try:
+            # update pose info
+            (trans,rot) = listener.lookupTransform('/map', '/base_link', rospy.Time(0))
+            yaw = math.degrees((euler_from_quaternion(rot)[2]))
+            db.pose_data = [trans[0], trans[1], yaw]
+        except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException):
+            continue
         # return the speed and angle
         angle, speed = brain.main()
         # Publish control data

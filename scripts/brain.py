@@ -18,9 +18,9 @@ class Brain():
         '''
         # How to call sensor data
         lidar_data = self.db.lidar_data
-        imu_data = self.db.imu_data
-        cam_data = self.db.camera_data
-        ultra_data = self.db.ultra_data
+
+        # How to call pose data
+        pose_data = self.db.pose_data
 
         # Add other functions or algorithm
         self.example_function()
@@ -28,11 +28,13 @@ class Brain():
         # finally derive the angle & speed of a car
         return angle, speed
         '''
-        lidar_data = self.db.lidar_data
+        # lidar_data = self.db.lidar_data
         # print(lidar_data)
+        pose_data = self.db.pose_data
+        print(pose_data)
         
-        angle = 10
-        speed = 3
+        angle = -10
+        speed = -3
 
         return angle, speed
 
