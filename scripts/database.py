@@ -14,15 +14,11 @@ class Database():
     def __init__(self, lidar=True):
         # init node
         rospy.init_node('sensor_node')
-        rospy.loginfo("---Initializing sensor node---\n\n\n")
-        time.sleep(1)
         # sensor subscriber
         if lidar: rospy.Subscriber("/scan", LaserScan, self.lidar_callback, queue_size=1)
         # Data
         self.lidar_data = None
         self.pose_data = [0,0,0] # x, y, yaw
-        rospy.loginfo("---now subscribing sensor data---\n\n\n")
-        time.sleep(1)
    
     def lidar_callback(self, data):
         self.lidar_data = data.ranges

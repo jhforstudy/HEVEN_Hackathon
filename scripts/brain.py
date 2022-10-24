@@ -28,13 +28,11 @@ class Brain():
         # finally derive the angle & speed of a car
         return angle, speed
         '''
-        # lidar_data = self.db.lidar_data
-        # print(lidar_data)
+        lidar_data = self.db.lidar_data
         pose_data = self.db.pose_data
-        print(pose_data)
         
-        angle = -10
-        speed = -3
+        angle = 0
+        speed = 0
 
         return angle, speed
 
@@ -57,7 +55,5 @@ if __name__ == "__main__":
         motor_msg.steering_angle_velocity = 1
         motor_msg.acceleration = 1
         motor_msg.jerk = 0
-
-        control_pub.publish(motor_msg)
 
         rate.sleep()
