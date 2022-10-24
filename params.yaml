@@ -10,8 +10,8 @@ max_steering_angle: 0.34 # radians
 update_pose_rate: 0.02
 
 # Lidar simulation parameters
-scan_beams: 100
-scan_field_of_view: 4.71 # radians
+scan_beams: 360
+scan_field_of_view: 6.28 # radians
 
 # The distance from the center of the
 # rear axis (base_link) to the lidar
