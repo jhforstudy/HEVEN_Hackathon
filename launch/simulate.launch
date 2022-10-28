@@ -14,8 +14,11 @@
     <rosparam command="load" file="$(find racecar_simulator)/params.yaml"/>
   </node>
 
+  <!-- Additional nodes -->
   <!-- Check collision -->
   <node pkg="racecar_simulator" name="check_collision" type="check_collision.py" output="screen"/>
+  <!-- Pose publisher -->
+  <node pkg="racecar_simulator" name="pose_pub" type="pose_pub.py" output="screen"/>
 
   <!-- Rviz -->
   <node type="rviz" name="rviz" pkg="rviz" args="-d $(find racecar_simulator)/rviz/racecar_rviz.rviz" />
