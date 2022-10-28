@@ -45,7 +45,7 @@ def main():
     db = Database(lidar=True)
     brain = Brain(db)
     # Initialize ROS rate & motor publisher
-    rate = rospy.Rate(100)
+    rate = rospy.Rate(10)
     control_pub = rospy.Publisher('drive', AckermannDrive, queue_size=1)
     # TF listener
     listener = tf.TransformListener()
@@ -54,10 +54,7 @@ def main():
 
     while not rospy.is_shutdown():
         try:
-            # update pose info
-            (trans,rot) = listener.lookupTransform('/map', '/base_link', rospy.Time(0))
-            yaw = math.degrees((euler_from_quaternion(rot)[2]))
-            db.pose_data = [trans[0], trans[1], yaw]
+            pass
         except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException):
             continue
         # return the speed and angle

@@ -8,6 +8,7 @@ import math
 from tf.transformations import euler_from_quaternion
 
 from sensor_msgs.msg import LaserScan
+from racecar_simulator.msg import CarPose
 
 
 class Database():
@@ -16,6 +17,7 @@ class Database():
         rospy.init_node('sensor_node')
         # sensor subscriber
         if lidar: rospy.Subscriber("/scan", LaserScan, self.lidar_callback, queue_size=1)
+        rospy.Subscriber("/car_pose", CarPose, self.pose_callback, queue_size=1)
         # Data
         self.lidar_data = None
         self.pose_data = [0,0,0] # x, y, yaw
@@ -23,20 +25,16 @@ class Database():
     def lidar_callback(self, data):
         self.lidar_data = data.ranges
 
+    def pose_callback(self, data):
+        self.pose_data = data.pose
+
 
 if __name__ == "__main__":
     try:
         test_db = Database(lidar=True)
-        rate = rospy.Rate(100)
-        # TF listener
-        listener = tf.TransformListener()
+        rate = rospy.Rate(10)
         while not rospy.is_shutdown():
             try:
-                # update pose info
-                (trans,rot) = listener.lookupTransform('/map', '/base_link', rospy.Time(0))
-                yaw = math.degrees((euler_from_quaternion(rot)[2]))
-                test_db.pose_data = [trans[0], trans[1], yaw]
-                print(test_db.pose_data)
                 rate.sleep()
             except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException):
                 continue

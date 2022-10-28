@@ -9,7 +9,6 @@ from database import Database
 from ackermann_msgs.msg import AckermannDrive
 
 
-# obstacle
 class Brain():
     def __init__(self, db):
         self.db = db
@@ -40,7 +39,7 @@ class Brain():
 if __name__ == "__main__":
     db = Database(lidar=True)
     test_brain = Brain(db)
-    rate = rospy.Rate(100)
+    rate = rospy.Rate(10)
     control_pub = rospy.Publisher('drive', AckermannDrive, queue_size=1)
     while not rospy.is_shutdown():
         car_angle, car_speed = test_brain.main()

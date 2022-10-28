@@ -28,7 +28,6 @@ for i in range(181, 360):
 
 class CheckCollide():
     def __init__(self):
-            
         self.lidar_data = None
         rospy.Subscriber('scan', LaserScan, self.callback)
 
