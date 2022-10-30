@@ -19,6 +19,8 @@
   <node pkg="racecar_simulator" name="check_collision" type="check_collision.py" output="screen"/>
   <!-- Pose publisher -->
   <node pkg="racecar_simulator" name="pose_pub" type="pose_pub.py" output="screen"/>
+  <!-- Visualize objects -->
+  <node pkg="racecar_simulator" name="visualize" type="visualize.py" output="screen"/>
 
   <!-- Rviz -->
   <node type="rviz" name="rviz" pkg="rviz" args="-d $(find racecar_simulator)/rviz/racecar_rviz.rviz" />
