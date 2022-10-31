@@ -1,8 +1,14 @@
 <launch>
   <!-- Open the model file -->
   <arg name="racecar_xacro" default="$(find racecar_simulator)/racecar.xacro"/>
+  <arg default="true" name="gui"/>
+  <arg name="rvizconfig" default="$(find racecar_simulator)/rviz/model_rviz.rviz"/>
   <param name="robot_description" command="xacro --inorder '$(arg racecar_xacro)'"/>
+  <param command="$(find xacro)/xacro '$(arg racecar_xacro)' gui:=$(arg gui)" name="robot_description" />
+  <param name="use_gui" value="$(arg gui)"/>
 
   <!-- Add the transformations -->
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
   <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+  <node args="-d $(arg rvizconfig)" name="rviz" pkg="rviz" type="rviz" />
 </launch>
