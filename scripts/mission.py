@@ -1,11 +1,13 @@
 #!/usr/bin/env python
 
+from ast import arg
 from tkinter import X
 import rospy
 import time
 import math
 from goal import PARKING_SPOT, STOP_LINE, Goal
 import numpy as np
+import threading
 
 from racecar_simulator.msg import CenterPose, HeadPose ,Traffic
 
@@ -35,6 +37,7 @@ class Mission():
         self.head_yaw = 0
         
         self.success_flag = 0
+        self.parked_spots = []
 
         self.goal_list = [
                         Goal(mode=PARKING_SPOT, x=100.0, y=50.0, yaw=math.radians(180)),
@@ -48,6 +51,10 @@ class Mission():
         rospy.Subscriber("/car_center", CenterPose, self.position_callback, queue_size=1)
         rospy.Subscriber("/car_head", HeadPose, self.head_callback, queue_size=1)
         self.traffic = rospy.Publisher("/traffic", Traffic, queue_size=1)
+
+        self.t = threading.Thread(target=self.reached)
+        self.t.daemon = True
+        self.t.start()
 
         pass
     
@@ -96,9 +103,13 @@ class Mission():
         check_flag = 0
         x_diff = goal.x - self.position_x
         y_diff = goal.y - self.position_y
-        yaw_diff = goal.y - self.position_yaw
+        yaw_diff = goal.yaw - self.position_yaw
 
         if goal.mode == PARKING_SPOT:
+            x_diff = goal.x - self.position_x
+            y_diff = goal.y - self.position_y
+            yaw_diff = goal.yaw - self.position_yaw
+
             rot_ref = goal.rotation * np.array([x_diff, y_diff])
             _x_diff = rot_ref[0]
             _y_diff = rot_ref[1]
@@ -107,8 +118,18 @@ class Mission():
                 check_flag = 1
             
         elif goal.mode == STOP_LINE:
+            x_diff = goal.x - self.head_x
+            y_diff = goal.y - self.head_y
+            yaw_diff = goal.yaw - self.head_yaw
+
             dist = math.sqrt(math.pow(x_diff,2) + math.pow(y_diff,2))
-            if dist <= goal.tolarance[0]:
+            angle = goal.yaw - math.atan2(-x_diff, -y_diff)
+            if angle > math.pi:
+                angle = angle - 2*math.pi
+            elif angle < -math.pi:
+                angle = angle + 2*math.pi
+            
+            if dist <= goal.tolarance[0] and abs(yaw_diff) <= math.pi/2 and abs(angle) < math.pi/2:
                 check_flag = 1
                      
         else:
@@ -123,14 +144,26 @@ class Mission():
                 reached_target = target
                 break
         return reached_target
-        # 이 함수가 와일문 안에서 돌면 됨. threading? 노드 하나 더?
+        # 이 함수가 반복문 안에서 돌면 됨.
 
     def parking_mission(self):
-        if self.reached is not None:
-            if self.reached.mode == PARKING_SPOT:
-                self.success_flag += 1
+        if self.t is not None:
+            if self.t.mode == PARKING_SPOT:
+                parking_succeed = 1
+                parking_spot = (self.t.x, self.t.y)
+                start_time = time.time()
+                while time.time() - start_time == 3:
+                    if self.t.mode != PARKING_SPOT:
+                        parking_succeed = 0
+                        parking_spot = 0
+                        break
+                    else:
+                        pass
+        if parking_spot not in self.parked_spots:
+            self.success_flag += parking_succeed
+            self.parked_spots.append(parking_spot)
 
-
+        return
 
 if __name__ == "__main__":
     try:

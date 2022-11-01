@@ -9,7 +9,8 @@ STOP_LINE = 1
 
 class Goal:
     def __init__(self, mode=PARKING_SPOT, x=None, y=None, yaw=None, flag=0):
-
+        
+        self.mode = mode
         self.x = x
         self.y = y
         self.yaw = yaw
