@@ -8,7 +8,7 @@ import math
 from tf.transformations import euler_from_quaternion
 
 from sensor_msgs.msg import LaserScan
-from racecar_simulator.msg import CarPose
+from racecar_simulator.msg import CenterPose
 
 
 class Database():
@@ -17,7 +17,7 @@ class Database():
         rospy.init_node('sensor_node')
         # sensor subscriber
         if lidar: rospy.Subscriber("/scan", LaserScan, self.lidar_callback, queue_size=1)
-        rospy.Subscriber("/car_pose", CarPose, self.pose_callback, queue_size=1)
+        rospy.Subscriber("/car_center", CenterPose, self.pose_callback, queue_size=1)
         # Data
         self.lidar_data = None
         self.pose_data = [0,0,0] # x, y, yaw

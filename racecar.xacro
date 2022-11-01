@@ -32,6 +32,24 @@
     </visual>
   </link>
 
+  <link name="center">
+  </link>
+
+  <joint name="base_to_center" type="fixed">
+    <parent link="base_link"/>
+    <child link="center"/>
+    <origin xyz="${wheelbase/2} 0 0"/>
+  </joint>
+
+  <link name="head">
+  </link>
+
+  <joint name="base_to_head" type="fixed">
+    <parent link="base_link"/>
+    <child link="head"/>
+    <origin xyz="${wheelbase} 0 0"/>
+  </joint>
+
   <joint name="base_to_laser_model" type="fixed">
     <parent link="base_link"/>
     <child link="laser_model"/>

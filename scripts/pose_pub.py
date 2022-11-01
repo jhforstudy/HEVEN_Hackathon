@@ -5,7 +5,7 @@ import math
 from tf.transformations import euler_from_quaternion
 
 from sensor_msgs.msg import LaserScan
-from racecar_simulator.msg import CarPose
+from racecar_simulator.msg import CenterPose, HeadPose
 
 
 class PosePublisher():
@@ -13,15 +13,21 @@ class PosePublisher():
         rospy.init_node('pose_pub_node')
         # TF listener
         self.listener = tf.TransformListener()
-        self.pose_pub = rospy.Publisher("/car_pose", CarPose, queue_size=1)
+        self.center_pub = rospy.Publisher("/car_center", CenterPose, queue_size=1)
+        self.head_pub = rospy.Publisher("/car_head", HeadPose, queue_size=1)
         pass
     
     def main(self):
         # update pose info
-        (trans,rot) = self.listener.lookupTransform('/map', '/base_link', rospy.Time(0))
-        yaw = math.degrees((euler_from_quaternion(rot)[2]))
-        pose_data = [trans[0], trans[1], yaw]
-        self.pose_pub.publish(pose_data)
+        (trans_center,rot_center) = self.listener.lookupTransform('/map', '/center', rospy.Time(0))
+        yaw_center = math.degrees((euler_from_quaternion(rot_center)[2]))
+        center_data = [trans_center[0], trans_center[1], yaw_center]
+        self.center_pub.publish(center_data)
+
+        (trans_head,rot_head) = self.listener.lookupTransform('/map', '/head', rospy.Time(0))
+        yaw_head = math.degrees((euler_from_quaternion(rot_head)[2]))
+        head_data = [trans_head[0], trans_head[1], yaw_head]
+        self.head_pub.publish(head_data)
 
 if __name__ == "__main__":
     try:

@@ -3,7 +3,7 @@
   <!-- <node pkg="joy" name="joy_node" type="joy_node"/> -->
 
   <!-- Launch a map from the maps folder-->
-  <arg name="map" default="$(find racecar_simulator)/maps/map1_gs.yaml"/>
+  <arg name="map" default="$(find racecar_simulator)/maps/map3_gs.yaml"/>
   <node pkg="map_server" name="map_server" type="map_server" args="$(arg map)"/>
 
   <!-- Launch the racecar model -->
@@ -16,7 +16,7 @@
 
   <!-- Additional nodes -->
   <!-- Check collision -->
-  <node pkg="racecar_simulator" name="check_collision" type="check_collision.py" output="screen"/>
+  <!-- <node pkg="racecar_simulator" name="check_collision" type="check_collision.py" output="screen"/> -->
   <!-- Pose publisher -->
   <node pkg="racecar_simulator" name="pose_pub" type="pose_pub.py" output="screen"/>
   <!-- Visualize objects -->

@@ -8,7 +8,7 @@ import cv2
 
 from sensor_msgs.msg import LaserScan
 from geometry_msgs.msg import Pose
-from racecar_simulator.msg import CarPose
+from racecar_simulator.msg import CenterPose
 
 WHEELBASE = 0.425
 REAR_LIDAR = 0.325
@@ -46,7 +46,7 @@ class CheckEnd():
     def __init__(self):
         self.if_end = False
         self.pose_data = None
-        rospy.Subscriber('car_pose', CarPose, self.pose_callback)
+        rospy.Subscriber('car_center', CenterPose, self.pose_callback)
 
     def pose_callback(self, data):
         self.pose_data = np.array(data.pose)

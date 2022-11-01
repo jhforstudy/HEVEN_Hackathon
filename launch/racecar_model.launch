@@ -10,5 +10,5 @@
   <!-- Add the transformations -->
   <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
   <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
-  <node args="-d $(arg rvizconfig)" name="rviz_easy" pkg="rviz" type="rviz" />
+  <!-- <node args="-d $(arg rvizconfig)" name="rviz_easy" pkg="rviz" type="rviz" /> -->
 </launch>

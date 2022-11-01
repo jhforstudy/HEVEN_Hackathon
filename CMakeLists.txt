@@ -53,7 +53,9 @@ if(DEFINED CATKIN_DEVEL_PREFIX)
     )
   add_message_files(
       FILES
-      CarPose.msg
+      CenterPose.msg
+      HeadPose.msg
+      Traffic.msg
   )
   generate_messages(
       DEPENDENCIES
