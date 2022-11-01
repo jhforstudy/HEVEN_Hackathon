@@ -1,9 +1,11 @@
 #!/usr/bin/env python
 
+from tkinter import X
 import rospy
 import time
 import math
-from goal import Goal
+from goal import PARKING_SPOT, STOP_LINE, Goal
+import numpy as np
 
 from racecar_simulator.msg import CenterPose, HeadPose ,Traffic
 
@@ -34,6 +36,13 @@ class Mission():
         
         self.success_flag = 0
 
+        self.goal_list = [
+                        Goal(mode=PARKING_SPOT, x=100.0, y=50.0, yaw=math.radians(180)),
+                        Goal(mode=PARKING_SPOT, x=150.0, y=50.0, yaw=math.radians(45)),
+                        Goal(mode=STOP_LINE, x=0.0, y=0.0, yaw=math.radians(180)),
+                        Goal(mode=STOP_LINE, x=0.0, y=0.0, yaw=math.radians(180))
+                        ]
+
         # ROS settings
         rospy.init_node('mission', anonymous=True)
         rospy.Subscriber("/car_center", CenterPose, self.position_callback, queue_size=1)
@@ -59,7 +68,6 @@ class Mission():
             while time.time() - start_time == 3:
                 self.success_flag += 1
 
-
     def traffic(self):
         if self.head_x
         2.1
@@ -82,14 +90,48 @@ class Mission():
         self.head_y = data.pose[1]
         self.head_yaw = data.pose[2]
 
-    def check(self):
-        x_diff = Goal.x - self.position_x
-        y_diff = Goal.y - self.position_y
 
-        Goal.[x_diff, y_diff]
 
-        Goal.yaw - self.position_yaw
-    
+    def check(self, goal):
+        check_flag = 0
+        x_diff = goal.x - self.position_x
+        y_diff = goal.y - self.position_y
+        yaw_diff = goal.y - self.position_yaw
+
+        if goal.mode == PARKING_SPOT:
+            rot_ref = goal.rotation * np.array([x_diff, y_diff])
+            _x_diff = rot_ref[0]
+            _y_diff = rot_ref[1]
+
+            if abs(_x_diff) <= goal.tolarance[0] and abs(_y_diff) <= goal.tolarance[1] and abs(yaw_diff) <= goal.tolarance[2]:
+                check_flag = 1
+            
+        elif goal.mode == STOP_LINE:
+            dist = math.sqrt(math.pow(x_diff,2) + math.pow(y_diff,2))
+            if dist <= goal.tolarance[0]:
+                check_flag = 1
+                     
+        else:
+            print("wrong goal format")
+
+        return check_flag
+
+    def reached(self):
+        reached_target = None
+        for target in self.goal_list:
+            if self.check(target) == 1:
+                reached_target = target
+                break
+        return reached_target
+        # 이 함수가 와일문 안에서 돌면 됨. threading? 노드 하나 더?
+
+    def parking_mission(self):
+        if self.reached is not None:
+            if self.reached.mode == PARKING_SPOT:
+                self.success_flag += 1
+
+
+
 if __name__ == "__main__":
     try:
         test_mission = Mission()
@@ -98,6 +140,7 @@ if __name__ == "__main__":
             try:
                 test_mission.main()
                 rate.sleep()
+
             except :
                 continue
     except rospy.ROSInterruptException:

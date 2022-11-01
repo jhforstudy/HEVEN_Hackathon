@@ -1,0 +1,58 @@
+{
+  "configurations": [
+    {
+      "browse": {
+        "databaseFilename": "${default}",
+        "limitSymbolsToIncludedHeaders": false
+      },
+      "includePath": [
+        "/home/sjyang915/catkin_ws/devel/include/**",
+        "/opt/ros/melodic/include/**",
+        "/home/sjyang915/catkin_ws/src/xycar_device/vesc/ackermann_cmd_mux/include/**",
+        "/home/sjyang915/catkin_ws/src/navigation-1.16.7/amcl/include/**",
+        "/home/sjyang915/catkin_ws/src/navigation-1.16.7/base_local_planner/include/**",
+        "/home/sjyang915/catkin_ws/src/beginner_tutorials/include/**",
+        "/home/sjyang915/catkin_ws/src/navigation-1.16.7/carrot_planner/include/**",
+        "/home/sjyang915/catkin_ws/src/navigation-1.16.7/clear_costmap_recovery/include/**",
+        "/home/sjyang915/catkin_ws/src/como_EtherCAT/include/**",
+        "/home/sjyang915/catkin_ws/src/comobot_simulation/comobot_control/include/**",
+        "/home/sjyang915/catkin_ws/src/comobot_simulation/comobot_main/include/**",
+        "/home/sjyang915/catkin_ws/src/comobot_navstack/include/**",
+        "/home/sjyang915/catkin_ws/src/comobot/Controller/include/**",
+        "/home/sjyang915/catkin_ws/src/navigation-1.16.7/costmap_2d/include/**",
+        "/home/sjyang915/catkin_ws/src/navigation-1.16.7/dwa_local_planner/include/**",
+        "/home/sjyang915/catkin_ws/src/navigation-1.16.7/global_planner/include/**",
+        "/home/sjyang915/catkin_ws/src/hector_slam-0.4.1/hector_geotiff/include/**",
+        "/home/sjyang915/catkin_ws/src/hector_slam-0.4.1/hector_map_tools/include/**",
+        "/home/sjyang915/catkin_ws/src/hector_slam-0.4.1/hector_mapping/include/**",
+        "/home/sjyang915/catkin_ws/src/hector_slam-0.4.1/hector_marker_drawing/include/**",
+        "/home/sjyang915/catkin_ws/src/navigation-1.16.7/map_server/include/**",
+        "/home/sjyang915/catkin_ws/src/navigation-1.16.7/move_base/include/**",
+        "/home/sjyang915/catkin_ws/src/navigation-1.16.7/move_slow_and_clear/include/**",
+        "/home/sjyang915/catkin_ws/src/navigation-1.16.7/nav_core/include/**",
+        "/home/sjyang915/catkin_ws/src/navigation-1.16.7/navfn/include/**",
+        "/home/sjyang915/catkin_ws/src/xycar_device/racecar-controllers/racecar_potential_field_controller/include/**",
+        "/home/sjyang915/catkin_ws/src/HEVEN_Hackathon/include/**",
+        "/home/sjyang915/catkin_ws/src/robot_pose_ekf-1.15.0/include/**",
+        "/home/sjyang915/catkin_ws/src/navigation-1.16.7/rotate_recovery/include/**",
+        "/home/sjyang915/catkin_ws/src/navigation-1.16.7/teb_local_planner/include/**",
+        "/home/sjyang915/catkin_ws/src/turtlebot3_simulations/turtlebot3_fake/include/**",
+        "/home/sjyang915/catkin_ws/src/turtlebot3_simulations/turtlebot3_gazebo/include/**",
+        "/home/sjyang915/catkin_ws/src/turtlebot3/turtlebot3_slam/include/**",
+        "/home/sjyang915/catkin_ws/src/xycar_device/usb_cam/include/**",
+        "/home/sjyang915/catkin_ws/src/xycar_device/vesc/vesc_ackermann/include/**",
+        "/home/sjyang915/catkin_ws/src/xycar_device/vesc/vesc_driver/include/**",
+        "/home/sjyang915/catkin_ws/src/xycar_device/vesc/vesc_safety_check/include/**",
+        "/home/sjyang915/catkin_ws/src/navigation-1.16.7/voxel_grid/include/**",
+        "/home/sjyang915/catkin_ws/src/yoon_EtherCAT_test/include/**",
+        "/usr/include/**"
+      ],
+      "name": "ROS",
+      "intelliSenseMode": "gcc-x64",
+      "compilerPath": "/usr/bin/gcc",
+      "cStandard": "gnu11",
+      "cppStandard": "c++14"
+    }
+  ],
+  "version": 4
+}
