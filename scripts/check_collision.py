@@ -5,6 +5,8 @@ import rospy
 import numpy as np
 import time
 import cv2
+import tkinter as tk
+import threading
 
 from sensor_msgs.msg import LaserScan
 from geometry_msgs.msg import Pose
@@ -14,6 +16,7 @@ from parameter_list import Param
 param = Param()
 
 check_array = np.zeros(shape=360)
+
 for i in range(0, 26):
     check_array[i] = param.REAR_LIDAR / np.cos(i*pi/180)
 
@@ -76,15 +79,46 @@ def end_detection(pose_data, mission_number):
     else:
         return False
 
+def init_button():
+    # Refresh button
+    window = tk.Tk()
+    window.geometry('70x50+0+150')
+    button = tk.Button(window, text='Refresh', command=initialize)
+    button.config(width=5, height=2)
+    button.place(x=0, y=0)
+    window.mainloop()
+
+def initialize():
+    # Initial Pose
+    pose = Pose()
+    pose.position.x = 0
+    pose.position.y = 0
+    pose.position.z = 0
+    pose.orientation.x = 0
+    pose.orientation.y = 0
+    pose.orientation.z = 0
+    pose.orientation.w = 1
+    pose_pub.publish(pose)
+    # refresh time & collision
+    check_col.collision_count = 0
+    check_col.initial_clock = rospy.get_time()
+
 if __name__ == "__main__":
     rospy.init_node("Check_collision")
     pose_pub = rospy.Publisher('pose', Pose, queue_size=1)
     check_col = CheckCollide()
     check_end = CheckEnd()
     rate = rospy.Rate(param.thread_rate)
+
     # Get mission number
     mission_number = rospy.get_param('~mission_number')
     time.sleep(1)
+
+    # Thread for Init button
+    button_thread = threading.Thread(target=init_button)
+    button_thread.daemon = True
+    button_thread.start()
+    
     while not rospy.is_shutdown():
         
         if collision_detection(check_col.lidar_data):
