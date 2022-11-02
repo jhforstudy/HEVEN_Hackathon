@@ -101,9 +101,6 @@ class Mission():
 
     def check(self, goal):
         check_flag = 0
-        x_diff = goal.x - self.position_x
-        y_diff = goal.y - self.position_y
-        yaw_diff = goal.yaw - self.position_yaw
 
         if goal.mode == PARKING_SPOT:
             x_diff = goal.x - self.position_x
