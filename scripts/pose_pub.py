@@ -29,6 +29,7 @@ class PosePublisher():
         head_data = [trans_head[0], trans_head[1], yaw_head]
         self.head_pub.publish(head_data)
 
+
 if __name__ == "__main__":
     try:
         test_pose_pub = PosePublisher()
