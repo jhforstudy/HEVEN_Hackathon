@@ -8,12 +8,12 @@ STOP_LINE = 1
 
 
 class Goal:
-    def __init__(self, mode=PARKING_SPOT, x=None, y=None, yaw=None, flag=0):
+    def __init__(self, mode=PARKING_SPOT, position=np.array(None, None), yaw=None, flag=0):
         
         self.mode = mode
-        self.x = x
-        self.y = y
+        self.position = position
         self.yaw = yaw
+        self.unit_vector = np.array([math.cos(yaw), math.sin(yaw)])
         self.flag = flag
 
         # self.x_tol = x_tol
