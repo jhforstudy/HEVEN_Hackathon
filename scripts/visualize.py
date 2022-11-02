@@ -1,43 +1,41 @@
 #!/usr/bin/env python
 
 import rospy
+
 from geometry_msgs.msg import Point
-
-WHEELBASE = 0.425
-REAR_LIDAR = 0.325
-WIDTH = 0.145
-SIZE_OF_TROPHY = 0.1
-
-# Endpoint of Map 1
-END_POINT_X = 13.34
-END_POINT_Y = -9.31
-
 from visualization_msgs.msg import Marker, MarkerArray
+from parameter_list import Param
 
-def MakeGoalMarker():
-    m = Marker()
+param = Param()
 
-    m.header.frame_id = "map"
-    m.ns = "goal_marker"
-    m.id = 1
-    m.type = Marker.POINTS
-    m.action = Marker.ADD
-    m.color.r, m.color.g, m.color.b = 1, 1, 0
-    m.color.a = 1
+def MakeGoalMarker(mission_number):
+    if mission_number == 1:
+        m = param.m
+        m.points.append(Point(param.END_POINT_X_1, param.END_POINT_Y_1, 0))
 
-    m.scale.x = 0.2
-    m.scale.y = 0.2
-    m.scale.z = 0.0
+        return m
+    
+    elif mission_number == 2:
+        m = param.m
+        m.points.append(Point(param.END_POINT_X_2, param.END_POINT_Y_2, 0))
 
-    m.points.append(Point(END_POINT_X, END_POINT_Y, 0))
+        return m
 
-    return m
+    elif mission_number == 3:
+        
+        return None
+
+    else:
+        rospy.loginfo("Mission number is incorrect.")
 
 if __name__ == "__main__":
     rospy.init_node("Visualize_node")
     visual_pub = rospy.Publisher('marker', Marker, queue_size=1)
     rate = rospy.Rate(1)
-    goal_marker = MakeGoalMarker()
+    # Get mission number
+    mission_number = rospy.get_param('~mission_number')
+
+    goal_marker = MakeGoalMarker(mission_number)
 
     while not rospy.is_shutdown():
         visual_pub.publish(goal_marker)

@@ -9,28 +9,23 @@ import cv2
 from sensor_msgs.msg import LaserScan
 from geometry_msgs.msg import Pose
 from racecar_simulator.msg import CenterPose
+from parameter_list import Param
 
-WHEELBASE = 0.425
-REAR_LIDAR = 0.325
-WIDTH = 0.145
-SIZE_OF_TROPHY = 0.5
-
-# Endpoint of Map 1
-END_POINT_X = 13.34
-END_POINT_Y = -9.31
+param = Param()
 
 check_array = np.zeros(shape=360)
 for i in range(0, 26):
-    check_array[i] = REAR_LIDAR / np.cos(i*pi/180)
+    check_array[i] = param.REAR_LIDAR / np.cos(i*pi/180)
 
 for i in range(26, 123):
-    check_array[i] = WIDTH / np.sin(i*pi/180)
+    check_array[i] = param.WIDTH / np.sin(i*pi/180)
 
 for i in range(123, 181):
-    check_array[i] = - (WHEELBASE - REAR_LIDAR) / np.cos(i*pi/180)
+    check_array[i] = - (param.WHEELBASE - param.REAR_LIDAR) / np.cos(i*pi/180)
 
 for i in range(181, 360):
     check_array[i] = check_array[360-i]
+
 
 class CheckCollide():
     def __init__(self):
@@ -42,6 +37,7 @@ class CheckCollide():
     def callback(self, data):
         self.lidar_data = np.array(data.ranges)
 
+
 class CheckEnd():
     def __init__(self):
         self.if_end = False
@@ -50,6 +46,7 @@ class CheckEnd():
 
     def pose_callback(self, data):
         self.pose_data = np.array(data.pose)
+
 
 # If collide, Move a car to Initialpose
 def collision_detection(lidar_data):
@@ -60,11 +57,21 @@ def collision_detection(lidar_data):
         return False
 
 # If end, stop the mission and show the results
-def end_detection(pose_data):
-    length = np.array(pose_data) - np.array([END_POINT_X, END_POINT_Y])
-    norm = np.linalg.norm(length)
+def end_detection(pose_data, mission_number):
+    if mission_number == 1:
+        length = np.array(pose_data) - np.array([param.END_POINT_X_1, param.END_POINT_Y_1])
+        norm = np.linalg.norm(length)
+    elif mission_number == 2:
+        length = np.array(pose_data) - np.array([param.END_POINT_X_2, param.END_POINT_Y_2])
+        norm = np.linalg.norm(length)
+    elif mission_number == 3:
+        length = np.array(pose_data) - np.array([param.END_POINT_X_3, param.END_POINT_Y_3])
+        norm = np.linalg.norm(length)
+    else:
+        norm = 0
+        rospy.loginfo("Mission number is incorrect.")
 
-    if norm < SIZE_OF_TROPHY:
+    if norm < param.SIZE_OF_TROPHY:
         return True
     else:
         return False
@@ -74,7 +81,9 @@ if __name__ == "__main__":
     pose_pub = rospy.Publisher('pose', Pose, queue_size=1)
     check_col = CheckCollide()
     check_end = CheckEnd()
-    rate = rospy.Rate(10)
+    rate = rospy.Rate(param.thread_rate)
+    # Get mission number
+    mission_number = rospy.get_param('~mission_number')
     time.sleep(1)
     while not rospy.is_shutdown():
         
@@ -90,10 +99,10 @@ if __name__ == "__main__":
             pose_pub.publish(pose)
             check_col.collision_count += 1
 
-        if end_detection(check_end.pose_data[:2]):
-            print("Time : ", elapsed_time)
-            print("Collision : ", check_col.collision_count)
-            break
+        if end_detection(check_end.pose_data[:2], mission_number):
+            rospy.loginfo("Time : %.3f", elapsed_time)
+            rospy.loginfo("Collision : %d", check_col.collision_count)
+            rospy.signal_shutdown("reason")
 
         elapsed_time = round((rospy.get_time() - check_col.initial_clock), 3)
         text_1 = "Time : " + str(elapsed_time) + " sec"
