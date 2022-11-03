@@ -8,20 +8,32 @@ from parameter_list import Param
 
 param = Param()
 
-def MakeGoalMarker(mission_number):
-    if mission_number == 1:
+def MakeGoalMarker(map_number):
+    if map_number == 1:
         m = param.m
-        m.points.append(Point(param.END_POINT_X_1, param.END_POINT_Y_1, 0))
+        m.pose.position.x = param.END_POINT_X_1
+        m.pose.position.y = param.END_POINT_Y_1
+        m.pose.position.z = 0
+        m.pose.orientation.x = 0.0
+        m.pose.orientation.y = 0.0
+        m.pose.orientation.z = 0.0
+        m.pose.orientation.w = 1.0
 
         return m
     
-    elif mission_number == 2:
+    elif map_number == 2:
         m = param.m
-        m.points.append(Point(param.END_POINT_X_2, param.END_POINT_Y_2, 0))
+        m.pose.position.x = param.END_POINT_X_2
+        m.pose.position.y = param.END_POINT_Y_2
+        m.pose.position.z = 0
+        m.pose.orientation.x = 0.0
+        m.pose.orientation.y = 0.0
+        m.pose.orientation.z = 0.0
+        m.pose.orientation.w = 1.0
 
         return m
 
-    elif mission_number == 3:
+    elif map_number == 3:
         
         return None
 
@@ -33,9 +45,9 @@ if __name__ == "__main__":
     visual_pub = rospy.Publisher('marker', Marker, queue_size=1)
     rate = rospy.Rate(1)
     # Get mission number
-    mission_number = rospy.get_param('~mission_number')
+    map_number = rospy.get_param('~map_number')
 
-    goal_marker = MakeGoalMarker(mission_number)
+    goal_marker = MakeGoalMarker(map_number)
 
     while not rospy.is_shutdown():
         visual_pub.publish(goal_marker)

@@ -60,14 +60,14 @@ def collision_detection(lidar_data):
         return False
 
 # If end, stop the mission and show the results
-def end_detection(pose_data, mission_number):
-    if mission_number == 1:
+def end_detection(pose_data, map_number):
+    if map_number == 1:
         length = np.array(pose_data) - np.array([param.END_POINT_X_1, param.END_POINT_Y_1])
         norm = np.linalg.norm(length)
-    elif mission_number == 2:
+    elif map_number == 2:
         length = np.array(pose_data) - np.array([param.END_POINT_X_2, param.END_POINT_Y_2])
         norm = np.linalg.norm(length)
-    elif mission_number == 3:
+    elif map_number == 3:
         length = np.array(pose_data) - np.array([param.END_POINT_X_3, param.END_POINT_Y_3])
         norm = np.linalg.norm(length)
     else:
@@ -111,7 +111,7 @@ if __name__ == "__main__":
     rate = rospy.Rate(param.thread_rate)
 
     # Get mission number
-    mission_number = rospy.get_param('~mission_number')
+    map_number = rospy.get_param('~map_number')
     time.sleep(1)
 
     # Thread for Init button
@@ -133,7 +133,7 @@ if __name__ == "__main__":
             pose_pub.publish(pose)
             check_col.collision_count += 1
 
-        if end_detection(check_end.pose_data[:2], mission_number):
+        if end_detection(check_end.pose_data[:2], map_number):
             rospy.loginfo("Time : %.3f", elapsed_time)
             rospy.loginfo("Collision : %d", check_col.collision_count)
             rospy.signal_shutdown("reason")

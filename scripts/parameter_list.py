@@ -28,13 +28,13 @@ class Param():
         self.m.header.frame_id = "map"
         self.m.ns = "goal_marker"
         self.m.id = 1
-        self.m.type = Marker.POINTS
+        self.m.type = Marker.CYLINDER
         self.m.action = Marker.ADD
         self.m.color.r, self.m.color.g, self.m.color.b = 1, 1, 0
         self.m.color.a = 1
-        self.m.scale.x = 0.2
-        self.m.scale.y = 0.2
-        self.m.scale.z = 0.0
+        self.m.scale.x = 0.5
+        self.m.scale.y = 0.5
+        self.m.scale.z = 0
 
         # Rate of each thread
         self.thread_rate = 10
