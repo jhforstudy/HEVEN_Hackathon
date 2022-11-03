@@ -10,10 +10,9 @@ from brain import Brain
 from tf.transformations import euler_from_quaternion
 
 from ackermann_msgs.msg import AckermannDrive
+from parameter_list import Param
 
-CAR_ANGLE_VELOCITY = 1
-CAR_ACCELERATION = 1
-CAR_JERK = 0
+param = Param()
 
 def drive(curr_angle, curr_speed):
     '''
@@ -33,10 +32,10 @@ def drive(curr_angle, curr_speed):
     
     control_msg = AckermannDrive()
     control_msg.steering_angle = curr_angle
-    control_msg.steering_angle_velocity = CAR_ANGLE_VELOCITY
+    control_msg.steering_angle_velocity = param.car_angular_velocity
     control_msg.speed = curr_speed
-    control_msg.acceleration = CAR_ACCELERATION
-    control_msg.jerk = CAR_JERK
+    control_msg.acceleration = param.car_acceleration
+    control_msg.jerk = param.car_jerk
 
     return control_msg
 
@@ -53,10 +52,6 @@ def main():
     time.sleep(1)
 
     while not rospy.is_shutdown():
-        try:
-            pass
-        except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException):
-            continue
         # return the speed and angle
         angle, speed = brain.main()
         # Publish control data
