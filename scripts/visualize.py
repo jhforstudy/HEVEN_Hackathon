@@ -31,44 +31,6 @@ def MakeGoalMarker(map_number):
         m.pose.orientation.z = 0.0
         m.pose.orientation.w = 1.0
 
-        traffic_stop = Marker()
-        traffic_stop.header.frame_id = "map"
-        traffic_stop.ns = "traffic_stop"
-        traffic_stop.id = 2
-        traffic_stop.type = Marker.ARROW
-        traffic_stop.action = Marker.ADD
-        traffic_stop.color.r, traffic_stop.color.g, traffic_stop.color.b = 0, 0, 1
-        traffic_stop.color.a = 1
-        traffic_stop.scale.x = 1
-        traffic_stop.scale.y = 1
-        traffic_stop.scale.z = 0
-        traffic_stop.pose.position.x = -3.96
-        traffic_stop.pose.position.y =-18.3
-        traffic_stop.pose.position.z = 0
-        traffic_stop.pose.orientation.x = 0.0
-        traffic_stop.pose.orientation.y = 0.0
-        traffic_stop.pose.orientation.z = 0.0
-        traffic_stop.pose.orientation.w = 1.0
-
-        traffic_left = Marker()
-        traffic_left.header.frame_id = "map"
-        traffic_left.ns = "traffic_left"
-        traffic_left.id = 3
-        traffic_left.type = Marker.ARROW
-        traffic_left.action = Marker.ADD
-        traffic_left.color.r, traffic_left.color.g, traffic_left.color.b = 0, 0, 1
-        traffic_left.color.a = 1
-        traffic_left.scale.x = 1
-        traffic_left.scale.y = 1
-        traffic_left.scale.z = 0
-        traffic_left.pose.position.x = -5.0
-        traffic_left.pose.position.y = -17.1
-        traffic_left.pose.position.z = 0
-        traffic_left.pose.orientation.x = 0.0
-        traffic_left.pose.orientation.y = 0.0
-        traffic_left.pose.orientation.z = 1.0
-        traffic_left.pose.orientation.w = 0.0
-
         return m
 
     elif map_number == 3:
@@ -87,20 +49,44 @@ def MakeTrafficMarker(map_number):
         traffic_stop.header.frame_id = "map"
         traffic_stop.ns = "traffic_stop"
         traffic_stop.id = 2
-        traffic_stop.type = Marker.ARROW
+        traffic_stop.type = Marker.LINE_STRIP
         traffic_stop.action = Marker.ADD
         traffic_stop.color.r, traffic_stop.color.g, traffic_stop.color.b = 0, 0, 1
         traffic_stop.color.a = 1
-        traffic_stop.scale.x = 1
+        traffic_stop.scale.x = 0.1
         traffic_stop.scale.y = 0.1
-        traffic_stop.scale.z = 0.1
-        traffic_stop.pose.position.x = -3.96
-        traffic_stop.pose.position.y =-18.3
-        traffic_stop.pose.position.z = 0
-        traffic_stop.pose.orientation.x = 0.0
-        traffic_stop.pose.orientation.y = 0.0
-        traffic_stop.pose.orientation.z = 0.7071068
-        traffic_stop.pose.orientation.w = 0.7071068
+        traffic_stop.scale.z = 0
+        l_point = Point()
+        l_point.x = -4.6
+        l_point.y = -17.8
+        l_point.z = 0 
+        r_point = Point()
+        r_point.x = -3.27
+        r_point.y = -17.8
+        r_point.z = 0
+
+        traffic_stop.points.append(l_point)
+        traffic_stop.points.append(r_point)
+
+        stop_sign = Marker()
+        stop_sign = Marker()
+        stop_sign.header.frame_id = "map"
+        stop_sign.ns = "stop_sign"
+        stop_sign.id = 4
+        stop_sign.type = Marker.CYLINDER
+        stop_sign.action = Marker.ADD
+        stop_sign.color.r, stop_sign.color.g, stop_sign.color.b = 1, 0, 0
+        stop_sign.color.a = 1
+        stop_sign.scale.x = param.SIZE_OF_TROPHY
+        stop_sign.scale.y = param.SIZE_OF_TROPHY
+        stop_sign.scale.z = 0
+        stop_sign.pose.position.x = -3.96
+        stop_sign.pose.position.y = -18.5
+        stop_sign.pose.position.z = 0
+        stop_sign.pose.orientation.x = 0.0
+        stop_sign.pose.orientation.y = 0.0
+        stop_sign.pose.orientation.z = 0.0
+        stop_sign.pose.orientation.w = 1.0
 
         if param.map_2_traffic_dir == "LEFT":
             traffic_left = Marker()
@@ -122,7 +108,7 @@ def MakeTrafficMarker(map_number):
             traffic_left.pose.orientation.z = 1.0
             traffic_left.pose.orientation.w = 0.0
 
-            return traffic_stop, traffic_left    
+            return traffic_stop, traffic_left, stop_sign
 
         elif param.map_2_traffic_dir == "RIGHT":
             traffic_right = Marker()
@@ -144,7 +130,7 @@ def MakeTrafficMarker(map_number):
             traffic_right.pose.orientation.z = 0.0
             traffic_right.pose.orientation.w = 1.0
 
-            return traffic_stop, traffic_right
+            return traffic_stop, traffic_right, stop_sign
         
         else:
             rospy.loginfo("Traffic direction is incorrect.")
@@ -171,8 +157,9 @@ if __name__ == "__main__":
         mkarray_msg = MarkerArray()
         temp_list = []
         temp_list.append(goal_marker)
-        for i in traffic_marker:
-            temp_list.append(i)
+        if traffic_marker is not None:
+            for i in traffic_marker:
+                temp_list.append(i)
         mkarray_msg = temp_list
 
         visual_pub.publish(mkarray_msg)
