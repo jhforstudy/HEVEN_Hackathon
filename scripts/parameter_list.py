@@ -38,3 +38,6 @@ class Param():
 
         # Rate of each thread
         self.thread_rate = 10
+
+        # Direction of traffic in MAP 2
+        self.map_2_traffic_dir = "RIGHT"
