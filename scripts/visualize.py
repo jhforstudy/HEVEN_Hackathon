@@ -51,7 +51,7 @@ def MakeTrafficMarker(map_number):
         traffic_stop.id = 2
         traffic_stop.type = Marker.LINE_STRIP
         traffic_stop.action = Marker.ADD
-        traffic_stop.color.r, traffic_stop.color.g, traffic_stop.color.b = 0, 0, 1
+        traffic_stop.color.r, traffic_stop.color.g, traffic_stop.color.b = 1, 0, 0
         traffic_stop.color.a = 1
         traffic_stop.scale.x = 0.1
         traffic_stop.scale.y = 0.1
@@ -68,7 +68,6 @@ def MakeTrafficMarker(map_number):
         traffic_stop.points.append(l_point)
         traffic_stop.points.append(r_point)
 
-        stop_sign = Marker()
         stop_sign = Marker()
         stop_sign.header.frame_id = "map"
         stop_sign.ns = "stop_sign"
