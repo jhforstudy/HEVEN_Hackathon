@@ -1,16 +1,24 @@
 # HEVEN Hackathon
 
-2022 HEVEN 자율주행 해커톤
+### 2022 HEVEN 자율주행 해커톤
+- 일정 : 2022-11-11(금) 16:00 ~ 2022-11-12(토) 10:00
+- 장소 : 성균관대학교 산학협력관 러닝팩토리 (85133호)
+- 인원 : 약 30명 내외 (4인 1팀 구성)
+- 내용 : 4인 1팀이 되어 주어진 map 상에서 자율주행 및 주차, 정지선 알고리즘 구현
 
-### 설치 방법
+## 설치
+### Docker를 이용한 개발 환경 구성 (Recommended)
+
+Windows 환경에서도 다음의 링크를 참고하여 편하게 개발할 수 있습니다.
+[Docker 환경 구성](https://github.com/jhforstudy/HEVEN_Hackathon/blob/master/InstallDocker.md)
+
+### Ubuntu에 패키지 직접 설치
 
 * Dependencies 설치
 
     ```
     sudo apt-get install ros-melodic-tf2-geometry-msgs ros-melodic-ackermann-msgs ros-melodic-joy ros-melodic-map-server
     ```
-    
-### 패키지 설치
 
 * 레포지토리 복제
     ```
@@ -25,7 +33,7 @@
     source devel/setup.bash
     ```
     
-### 실행
+## 실행
 
 * 시뮬레이터 실행
     ```
@@ -41,7 +49,7 @@
     ```
     rosrun racecar_simulator teleop_keyboard.py
     ```
-### 센서 값 호출 방법
+## 센서 값 호출 방법
 
 * Brain.py에서 다음과 같이 호출하여 사용할 수 있음
     ```python
