@@ -26,7 +26,7 @@
     <param name="map_number" value="$(arg map_number)"/>
   </node>
   <!-- Mission node -->
-  <node pkg="racecar_simulator" name="visualize" type="mission.py" output="screen">
+  <node pkg="racecar_simulator" name="mission" type="mission.py" output="screen">
     <param name="map_number" value="$(arg map_number)"/>
   </node>
   <!-- Rviz -->

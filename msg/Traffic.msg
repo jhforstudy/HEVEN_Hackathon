@@ -1,3 +1,3 @@
 string traffic
 
-float second
+float32 second

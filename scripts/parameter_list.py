@@ -21,12 +21,12 @@ class Param():
         self.END_POINT_X_3 = 26.21
         self.END_POINT_Y_3 = -62.39
         
-        # Direction of traffic in MAP 2
+        # Direction of traffic in MAP 2 ("LEFT" or "RIGHT")
         self.map_2_traffic_dir = "RIGHT"
 
-        # Direction of first parking mission (1 or 2 or 3 or 4)
+        # Direction of first parking mission in MAP 3 (1 or 2 or 3 or 4)
         self.map_3_parking_first_dir = 4
-        # Direction of second parking mission (5 or 6 or 7 or 8)
+        # Direction of second parking mission in MAP 3 (5 or 6 or 7 or 8)
         self.map_3_parking_second_dir = 7
 
         # Center point of parking lot (First parking mission)

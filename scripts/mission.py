@@ -63,8 +63,7 @@ class Mission():
         self.stopped_spots = []
         self.passed_traffic = []
 
-        self.parking_1_start = False
-        self.parking_2_start = False
+        self.parking_start = False
 
         self.parking_1_start_time = 0
         self.stop_time = 0
@@ -72,6 +71,8 @@ class Mission():
         self.parking_index = 0
         self.stop_index = 0
         self.traffic_index = 0
+
+        self.t = None
 
         park_target_list = GetCurrentParkingLot()
         self.goal_list = [
@@ -89,36 +90,43 @@ class Mission():
         rospy.Subscriber("/drive", AckermannDrive, self.speed_callback, queue_size=1)
         self.traffic = rospy.Publisher("/traffic", Traffic, queue_size=1)
         self.complete = rospy.Publisher("/complete", Complete, queue_size=1)
+        self.map_number = rospy.get_param('~map_number')
+        self.rate = rospy.Rate(param.thread_rate)
 
         # Thread settings
-        self.t = threading.Thread(target=self.reached)
-        self.t.daemon = True
-        self.t.start()
+        self.t_reached = threading.Thread(target=self.reached)
+        self.t_reached.daemon = True
+        self.t_reached.start()
+
+        self.main()
 
 ##########################################################################################################
     def main(self):
-        check_flag = self.check(self.t)
-        print(check_flag)
-        # If mission starts
-        if check_flag == 1:
-            if map_number == 3:
-                if self.t.mode == PARKING_SPOT:
-                    # Before start parking mission
-                    if self.parking_start == False:
-                        self.parking_start = True
-                    # After start parking
+        while not rospy.is_shutdown():
+            check_flag = self.check(self.t)
+            rospy.loginfo(check_flag)
+            # If mission starts
+            if check_flag == 1:
+                if self.map_number == 3:
+                    if self.t.mode == PARKING_SPOT:
+                        # Before start parking mission
+                        if self.parking_start == False:
+                            self.parking_start = True
+                        # After start parking
+                        else:
+                            self.parking_mission(self.t)
+                    elif self.t.mode == STOP_LINE:
+                        # TBD
+                        if self.stop_start == False:
+                            self.stop_start = True
+                        else:
+                            self.stop_mission()
+                        self.traffic_mission()
+                        self.traffic_index = 0
                     else:
-                        self.parking_mission(self.t)
-            if self.t.mode == STOP_LINE:
-                # TBD
-                if self.stop_start == False:
-                    self.stop_start = True
-                else:
-                    self.stop_mission()
-                self.traffic_mission()
-                self.traffic_index = 0
-            else:
-                rospy.loginfo("WRONG GOAL FORMAT !!!")
+                        rospy.loginfo("WRONG GOAL FORMAT !!!")
+
+            self.rate.sleep()
 ##########################################################################################################
 
     def position_callback(self, data):
@@ -137,11 +145,9 @@ class Mission():
     # Check if parking mission is end
     def parking_mission(self):
         # self.t.position[0] = x coordinate / self.t.position[1] = y coordinate / self.t.yaw = yaw angle (degree)
-        parking_spot = self.t.position
-        
         if self.parking_index == 0:
             # Check if a car is stopped
-            if self.t.mode == PARKING_SPOT and self.speed == 0:
+            if goal.mode == PARKING_SPOT and self.speed == 0:
                 self.parking_1_start_time = time.time()
                 self.parking_index += 1
 
@@ -162,7 +168,7 @@ class Mission():
         
         elif self.parking_index == 2:
             # Publish that parking mission is succeed
-            if self.t.position is not None:
+            if self.t.position is None:
                 self.parking_index += 1
             else:
                 complete_msg = Complete()
@@ -174,7 +180,7 @@ class Mission():
             # if parking mission is completed, parking spot will be alive.
             # if not, parking spot will become None.
             self.success_flag += parking_flag
-            self.parked_spots.append(self.t.position)
+            self.parked_spots.append(goal.position)
             # Reset the trigger
             self.parking_index = 0
             self.parking_start = False
@@ -276,7 +282,7 @@ class Mission():
                 yaw_diff = goal.yaw - self.position_yaw
                 
                 rot_ref = goal.yaw * np.array(-position_diff)
-
+                print(position_diff, yaw_diff, rot_ref)
                 if abs(rot_ref[0]) <= goal.tolarance[0] and abs(rot_ref[1]) <= goal.tolarance[1] and abs(yaw_diff) <= goal.tolarance[2]:
                     check_flag = 1
                 
@@ -306,7 +312,9 @@ class Mission():
             if self.check(target) == 1:
                 reached_target = target
                 break
-
+        
+        self.t = reached_target
+        self.rate.sleep()
         return reached_target
             
     def show_result(self, parking_spots, stop_spots):
@@ -315,7 +323,6 @@ class Mission():
         print("Stop spots : ", stop_spots)
 
 if __name__ == "__main__":
-    map_number = rospy.get_param('~map_number')
     try:
         test_mission = Mission()
         rate = rospy.Rate(10)
