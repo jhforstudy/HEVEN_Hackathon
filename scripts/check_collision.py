@@ -14,6 +14,7 @@ from geometry_msgs.msg import Pose
 from racecar_simulator.msg import CenterPose
 from parameter_list import Param
 from ackermann_msgs.msg import AckermannDrive
+from tf.transformations import quaternion_from_euler
 
 param = Param()
 
@@ -37,6 +38,8 @@ class CheckCollide():
         self.lidar_data = None
         self.initial_clock = rospy.get_time()
         self.collision_count = 0
+        # Index of Spawn list
+        self.spawn_index = 1
         rospy.Subscriber('scan', LaserScan, self.callback)
 
     def callback(self, data):
@@ -104,6 +107,8 @@ def initialize():
     # refresh time & collision
     check_col.collision_count = 0
     check_col.initial_clock = rospy.get_time()
+    # initialize spawn_index
+    check_col.spawn_index = 0
 
 if __name__ == "__main__":
     rospy.init_node("Check_collision")
@@ -115,6 +120,15 @@ if __name__ == "__main__":
 
     # Get mission number
     map_number = rospy.get_param('~map_number')
+    # Spawn list
+    if map_number == 1:
+        spawn_list = param.MAP_1_SPAWN_POINT
+    elif map_number == 2:
+        spawn_list = param.MAP_2_SPAWN_POINT
+    elif map_number == 3:
+        spawn_list = param.MAP_3_SPAWN_POINT
+    else:
+        rospy.loginfo("Incorrect map number.")
     time.sleep(1)
 
     # Thread for Init button
@@ -142,13 +156,11 @@ if __name__ == "__main__":
             else:
                 if collision_detection(check_col.lidar_data):
                     pose = Pose()
-                    pose.position.x = 0
-                    pose.position.y = 0
+                    pose.position.x = spawn_list[check_col.spawn_index][0]
+                    pose.position.y = spawn_list[check_col.spawn_index][1]
                     pose.position.z = 0
-                    pose.orientation.x = 0
-                    pose.orientation.y = 0
-                    pose.orientation.z = 0
-                    pose.orientation.w = 1
+                    angle_yaw = spawn_list[check_col.spawn_index][2]
+                    pose.orientation.x, pose.orientation.y, pose.orientation.z, pose.orientation.w = quaternion_from_euler(0,0,pi*angle_yaw/180)
                     pose_pub.publish(pose)
                     check_col.collision_count += 1
 

@@ -14,14 +14,23 @@ class Param():
         # Endpoint of Map 1
         self.END_POINT_X_1 = 13.34
         self.END_POINT_Y_1 = -9.31
-
         # Endpoint of Map 2
         self.END_POINT_X_2 = -3.96
         self.END_POINT_Y_2 = -4.97
-
         # Endpoint of Map 3
         self.END_POINT_X_3 = 13.34
         self.END_POINT_Y_3 = -9.31
+        
+        # Direction of traffic in MAP 2
+        self.map_2_traffic_dir = "LEFT"
+
+        # Spawn lists (x, y, yaw - degree)
+        self.MAP_1_SPAWN_POINT = [(0,0,0)]
+        if self.map_2_traffic_dir == "LEFT":
+            self.MAP_2_SPAWN_POINT = [(0,0,0),(-7.83,-17.18,180)]
+        elif self.map_2_traffic_dir == "RIGHT":
+            self.MAP_2_SPAWN_POINT = [(0,0,0),(-0.28,-17.18,0)]
+        self.MAP_3_SPAWN_POINT = [(0,0,0)]
 
         # Goal Marker
         self.m = Marker()
@@ -38,6 +47,3 @@ class Param():
 
         # Rate of each thread
         self.thread_rate = 10
-
-        # Direction of traffic in MAP 2
-        self.map_2_traffic_dir = "RIGHT"
