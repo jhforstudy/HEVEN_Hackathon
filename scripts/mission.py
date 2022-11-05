@@ -137,6 +137,8 @@ class Mission():
     # Check if parking mission is end
     def parking_mission(self):
         # self.t.position[0] = x coordinate / self.t.position[1] = y coordinate / self.t.yaw = yaw angle (degree)
+        parking_spot = self.t.position
+        
         if self.parking_index == 0:
             # Check if a car is stopped
             if self.t.mode == PARKING_SPOT and self.speed == 0:
@@ -151,15 +153,16 @@ class Mission():
                 parking_flag = 1
                 self.parking_index += 1
 
-            elif time.time() - self.parking_1_start_time <= 3 and self.speed != 0:
+            elif time.time() - self.parking_1_start_time < 3 and self.speed != 0:
                 # Parking fail
                 rospy.loginfo("Parking mission failed...")
                 parking_flag = 0
+                parking_spot = None
                 self.parking_index += 1
         
         elif self.parking_index == 2:
             # Publish that parking mission is succeed
-            if self.t.position is None:
+            if self.t.position is not None:
                 self.parking_index += 1
             else:
                 complete_msg = Complete()
@@ -177,14 +180,34 @@ class Mission():
             self.parking_start = False
 
     def stop_mission(self):
+        stop_spot = self.t.position
         if self.stop_index == 0:
             # check if a car is stopped
             if self.t.mode == STOP_LINE and self.speed == 0:
-                
-                pass
-
+                self.stop_time = time.time()
+                self.stop_index += 1
+        
         elif self.stop_index == 1:
-            pass
+            # After a car stopped
+            if time.time() - self.stop_time >= 3:
+                # Stop success
+                rospy.loginfo("Stop mission success!")
+                stop_flag = 1
+                self.stop_index += 1
+
+            elif time.time() - self.stop_time < 3 and self.speed != 0:
+                # Stop fail
+                rospy.loginfo("Stop mission failed...")
+                stop_flag = 0
+                stop_spot = None
+                self.stop_index += 1
+
+        elif self.stop_index == 2:
+            if stop_spot is not None:
+                self.success_flag += stop_flag
+                self.stopped_spots.append(stop_spot)
+                
+        
         """
         if self.t is not None:
             if self.t.mode == STOP_LINE and self.speed == 0:
@@ -236,7 +259,9 @@ class Mission():
                     else:
                         pass
                 if traffic_succeed == 1:
-                    self.complete.publish(True)
+                    complete_msgs = Complete()
+                    complete_msgs.complete = True
+                    self.complete.publish(complete_msgs)
         if traffic_spot not in self.passed_traffic:
             self.success_flag += traffic_succeed
             self.traffic_spots.append(traffic_spot)
