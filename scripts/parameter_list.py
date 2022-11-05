@@ -15,22 +15,35 @@ class Param():
         self.END_POINT_X_1 = 13.34
         self.END_POINT_Y_1 = -9.31
         # Endpoint of Map 2
-        self.END_POINT_X_2 = -3.96
-        self.END_POINT_Y_2 = -4.97
+        self.END_POINT_X_2 = -3.919
+        self.END_POINT_Y_2 = -1.2804
         # Endpoint of Map 3
-        self.END_POINT_X_3 = 13.34
-        self.END_POINT_Y_3 = -9.31
+        self.END_POINT_X_3 = 26.21
+        self.END_POINT_Y_3 = -62.39
         
         # Direction of traffic in MAP 2
-        self.map_2_traffic_dir = "LEFT"
+        self.map_2_traffic_dir = "RIGHT"
+
+        # Direction of first parking mission (1 or 2)
+        self.map_3_parking_first_dir = 1
+        # Direction of first parking mission (3 or 4)
+        self.map_3_parking_second_dir = 3
 
         # Spawn lists (x, y, yaw - degree)
         self.MAP_1_SPAWN_POINT = [(0,0,0)]
         if self.map_2_traffic_dir == "LEFT":
-            self.MAP_2_SPAWN_POINT = [(0,0,0),(-7.83,-17.18,180)]
+            self.MAP_2_SPAWN_POINT = [(0,0,0),(-7.08,-15.835,180)]
         elif self.map_2_traffic_dir == "RIGHT":
-            self.MAP_2_SPAWN_POINT = [(0,0,0),(-0.28,-17.18,0)]
+            self.MAP_2_SPAWN_POINT = [(0,0,0),(-0.669,-15.835,0)]
         self.MAP_3_SPAWN_POINT = [(0,0,0)]
+        if self.map_3_parking_first_dir == 1:
+            self.MAP_3_SPAWN_POINT.append((1.947,-15.683,0))
+        elif self.map_3_parking_first_dir == 2:
+            self.MAP_3_SPAWN_POINT.append((13.837,-15.683,0))
+        if self.map_3_parking_second_dir == 3:
+            self.MAP_3_SPAWN_POINT.append((11.526,-53.659,180))
+        elif self.map_3_parking_second_dir == 4:
+            self.MAP_3_SPAWN_POINT.append((2.47,-53.659,0))
 
         # Goal Marker
         self.m = Marker()

@@ -34,8 +34,16 @@ def MakeGoalMarker(map_number):
         return m
 
     elif map_number == 3:
-        
-        return None
+        m = param.m
+        m.pose.position.x = param.END_POINT_X_3
+        m.pose.position.y = param.END_POINT_Y_3
+        m.pose.position.z = 0
+        m.pose.orientation.x = 0.0
+        m.pose.orientation.y = 0.0
+        m.pose.orientation.z = 0.0
+        m.pose.orientation.w = 1.0
+
+        return m
 
     else:
         rospy.loginfo("Map number is incorrect.")
@@ -57,12 +65,12 @@ def MakeTrafficMarker(map_number):
         traffic_stop.scale.y = 0.1
         traffic_stop.scale.z = 0
         l_point = Point()
-        l_point.x = -4.6
-        l_point.y = -17.8
+        l_point.x = -4.60
+        l_point.y = -16.45
         l_point.z = 0 
         r_point = Point()
-        r_point.x = -3.27
-        r_point.y = -17.8
+        r_point.x = -3.39
+        r_point.y = -16.45
         r_point.z = 0
 
         traffic_stop.points.append(l_point)
@@ -80,7 +88,7 @@ def MakeTrafficMarker(map_number):
         stop_sign.scale.y = param.SIZE_OF_TROPHY
         stop_sign.scale.z = 0
         stop_sign.pose.position.x = -3.96
-        stop_sign.pose.position.y = -18.5
+        stop_sign.pose.position.y = -16.9
         stop_sign.pose.position.z = 0
         stop_sign.pose.orientation.x = 0.0
         stop_sign.pose.orientation.y = 0.0
@@ -99,8 +107,8 @@ def MakeTrafficMarker(map_number):
             traffic_left.scale.x = 1
             traffic_left.scale.y = 0.1
             traffic_left.scale.z = 0.1
-            traffic_left.pose.position.x = -5.0
-            traffic_left.pose.position.y = -17.1
+            traffic_left.pose.position.x = -5.00
+            traffic_left.pose.position.y = -15.8
             traffic_left.pose.position.z = 0
             traffic_left.pose.orientation.x = 0.0
             traffic_left.pose.orientation.y = 0.0
@@ -121,8 +129,8 @@ def MakeTrafficMarker(map_number):
             traffic_right.scale.x = 1
             traffic_right.scale.y = 0.1
             traffic_right.scale.z = 0.1
-            traffic_right.pose.position.x = -3.2
-            traffic_right.pose.position.y = -17.1
+            traffic_right.pose.position.x = -2.91
+            traffic_right.pose.position.y = -15.87
             traffic_right.pose.position.z = 0
             traffic_right.pose.orientation.x = 0.0
             traffic_right.pose.orientation.y = 0.0
