@@ -39,7 +39,7 @@ class CheckCollide():
         self.initial_clock = rospy.get_time()
         self.collision_count = 0
         # Index of Spawn list
-        self.spawn_index = 1
+        self.spawn_index = 0
         rospy.Subscriber('scan', LaserScan, self.callback)
 
     def callback(self, data):

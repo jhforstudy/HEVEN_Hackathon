@@ -24,10 +24,43 @@ class Param():
         # Direction of traffic in MAP 2
         self.map_2_traffic_dir = "RIGHT"
 
-        # Direction of first parking mission (1 or 2)
-        self.map_3_parking_first_dir = 1
-        # Direction of first parking mission (3 or 4)
-        self.map_3_parking_second_dir = 3
+        # Direction of first parking mission (1 or 2 or 3 or 4)
+        self.map_3_parking_first_dir = 4
+        # Direction of first parking mission (5 or 6 or 7 or 8)
+        self.map_3_parking_second_dir = 7
+
+        # Center point of parking lot (First parking mission)
+        self.PARKING_LOT_X_1 = 1.647
+        self.PARKING_LOT_Y_1 = -20.683
+
+        self.PARKING_LOT_X_2 = 0.497
+        self.PARKING_LOT_Y_2 = -20.683
+
+        self.PARKING_LOT_X_3 = 12.026
+        self.PARKING_LOT_Y_3 = -20.683
+
+        self.PARKING_LOT_X_4 = 13.226
+        self.PARKING_LOT_Y_4 = -20.683
+
+        # Center point of parking lot (Second parking mission)
+        self.PARKING_LOT_X_5 = 13.226
+        self.PARKING_LOT_Y_5 = -48.55
+
+        self.PARKING_LOT_X_6 = 12.026
+        self.PARKING_LOT_Y_6 = -48.55
+
+        self.PARKING_LOT_X_7 = 0.497
+        self.PARKING_LOT_Y_7 = -48.55
+
+        self.PARKING_LOT_X_8 = 1.647
+        self.PARKING_LOT_Y_8 = -48.55
+
+        # Size of parking lot
+        self.PARKING_LOT_WIDTH = 0.55
+        self.PARKING_LOT_HEIGHT = 0.8
+
+        # Tilt degree of parking lot
+        self.PARKING_LOT_TILT_DEGREE = 45
 
         # Spawn lists (x, y, yaw - degree)
         self.MAP_1_SPAWN_POINT = [(0,0,0)]
@@ -36,20 +69,23 @@ class Param():
         elif self.map_2_traffic_dir == "RIGHT":
             self.MAP_2_SPAWN_POINT = [(0,0,0),(-0.669,-15.835,0)]
         self.MAP_3_SPAWN_POINT = [(0,0,0)]
-        if self.map_3_parking_first_dir == 1:
+
+        # Spawn points (First parking mission)
+        if self.map_3_parking_first_dir == 1 or self.map_3_parking_first_dir == 2:
             self.MAP_3_SPAWN_POINT.append((1.947,-15.683,0))
-        elif self.map_3_parking_first_dir == 2:
+        elif self.map_3_parking_first_dir == 3 or self.map_3_parking_first_dir == 4:
             self.MAP_3_SPAWN_POINT.append((13.837,-15.683,0))
-        if self.map_3_parking_second_dir == 3:
+
+        # Spawn points (Second parking mission)
+        if self.map_3_parking_second_dir == 5 or self.map_3_parking_second_dir == 6:
             self.MAP_3_SPAWN_POINT.append((11.526,-53.659,180))
-        elif self.map_3_parking_second_dir == 4:
+        elif self.map_3_parking_second_dir == 7 or self.map_3_parking_second_dir == 8:
             self.MAP_3_SPAWN_POINT.append((2.47,-53.659,0))
 
         # Goal Marker
         self.m = Marker()
         self.m.header.frame_id = "map"
         self.m.ns = "goal_marker"
-        self.m.id = 1
         self.m.type = Marker.CYLINDER
         self.m.action = Marker.ADD
         self.m.color.r, self.m.color.g, self.m.color.b = 1, 1, 0

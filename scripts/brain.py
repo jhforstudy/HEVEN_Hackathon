@@ -46,16 +46,10 @@ if __name__ == "__main__":
     control_pub = rospy.Publisher('drive', AckermannDrive, queue_size=1)
     while not rospy.is_shutdown():
         car_angle, car_speed = test_brain.main()
-        # print(car_angle, car_speed)
-
         motor_msg = AckermannDrive()
-        # print("car_speed",car_speed)
-        # print("car_angle",car_angle)
-        # print("car_speed: car_speed, angle: {car_angle}")
         motor_msg.steering_angle = car_angle
         motor_msg.speed = car_speed
         motor_msg.steering_angle_velocity = param.car_angular_velocity
         motor_msg.acceleration = param.car_acceleration
         motor_msg.jerk = param.car_jerk
-
         rate.sleep()
