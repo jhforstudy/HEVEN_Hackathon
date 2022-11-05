@@ -237,7 +237,7 @@ def MakeParkinglotMarker():
 if __name__ == "__main__":
     rospy.init_node("Visualize_node")
     visual_pub = rospy.Publisher('marker_array', MarkerArray, queue_size=1)
-    rate = rospy.Rate(1)
+    rate = rospy.Rate(param.thread_rate)
     # Get mission number
     map_number = rospy.get_param('~map_number')
 

@@ -5,6 +5,7 @@ import time
 import math
 import numpy as np
 import threading
+import tkinter as tk
 from goal import PARKING_SPOT, STOP_LINE, Goal
 from parameter_list import Param
 
@@ -50,6 +51,7 @@ def GetCurrentParkingLot():
 
     return l
 
+
 class Mission():
     def __init__(self):
         self.position = np.array([0,0])
@@ -69,6 +71,7 @@ class Mission():
         self.stop_start = False
         self.traffic_start = False
 
+        self.parking_success = False
         self.parking_1_start_time = 0
         self.stop_time = 0
 
@@ -119,6 +122,11 @@ class Mission():
         # self.t_reached = threading.Thread(target=self.reached)
         # self.t_reached.daemon = True
         # self.t_reached.start()
+
+        # Thread for Init button
+        button_mission_thread = threading.Thread(target=self.init_mission_button)
+        button_mission_thread.daemon = True
+        button_mission_thread.start()
 
         self.main()
 
@@ -211,6 +219,7 @@ class Mission():
                 rospy.loginfo("Parking mission success!")
                 self.parking_flag = 1
                 self.parking_index += 1
+                self.parking_success = True
 
             elif time.time() - self.parking_1_start_time < 3 and self.speed != 0:
                 # Parking fail
@@ -228,17 +237,19 @@ class Mission():
                 self.parking_index += 1
     
         elif self.parking_index == 3:
-            self.success_parking += self.parking_flag
-            self.parked_spots.append(parking_spot)
-        
-            # publish that parking mission is succeed
-            complete_msg = Complete()
-            complete_msg.complete = True
-            self.complete.publish(complete_msg)
+            if self.parking_success:
+                self.success_parking += self.parking_flag
+                self.parked_spots.append(parking_spot)
+            
+                # publish that parking mission is succeed
+                complete_msg = Complete()
+                complete_msg.complete = True
+                self.complete.publish(complete_msg)
 
             # Reset the trigger
             self.parking_start = False
             self.parking_flag = 0
+            self.parking_success = False
 
     #### left time and stop publish
     def stop_mission(self, goal=Goal):
@@ -454,10 +465,25 @@ class Mission():
         traffic.traffic = what
         self.traffic.publish(traffic)
 
+    def init_mission_button(self):
+        # Refresh button
+        window = tk.Tk()
+        window.geometry('70x50+130+150')
+        button = tk.Button(window, text='Refresh Mission', command=self.initialize)
+        button.config(width=5, height=2)
+        button.place(x=0, y=0)
+        window.mainloop()
+
+    def initialize(self):
+        # refresh all the flags
+        self.success_parking = 0
+        self.success_stop = 0
+
 if __name__ == "__main__":
     try:
         test_mission = Mission()
-        rate = rospy.Rate(10)
+        rate = rospy.Rate(param.thread_rate)
+
         while not rospy.is_shutdown():
             try:
                 test_mission.main()
