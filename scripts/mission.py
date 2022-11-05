@@ -42,6 +42,8 @@ class Mission():
         self.success_flag = 0
         self.parked_spots = []
         self.stop_spots = []
+        self.reached_target = None
+
 
         self.goal_list = [
                         # TBD
@@ -64,10 +66,15 @@ class Mission():
         self.t.start()
 
     def main(self):
-        self.parking_mission()
-        # self.traffic_misison()
-        self.check()
-        pass
+        check_flag = self.check(self.reached_target)
+        print(check_flag)
+        if check_flag == 1:
+            if self.reached_target.mode == PARKING_SPOT:
+                self.parking_mission()
+            elif self.reached_target.mode == STOP_LINE:
+                self.traffic_mission()
+            else:
+                rospy.loginfo("WRONG GOAL FORMAT !!!")
 
     def position_callback(self, data):
         self.position = np.array([data.pose[0], data.pose[1]])
@@ -82,6 +89,7 @@ class Mission():
     def speed_callback(self, data):
         self.speed = data.speed
 
+    # Check if parking mission is end
     def parking_mission(self):
         # self.t.x = x coordinate / self.t.y = y coordinate / self.t.yaw = yaw angle (degree)
         if self.t is not None:
@@ -99,6 +107,10 @@ class Mission():
         if parking_spot not in self.parked_spots:
             self.success_flag += parking_succeed
             self.parked_spots.append(parking_spot)
+
+    # Check if traffic mission is end
+    def traffic_mission(self):
+        pass
 
     def stop_mission(self):
         if self.t is not None:
@@ -120,41 +132,43 @@ class Mission():
     def check(self, goal=Goal):
         check_flag = 0
 
-        if goal.mode == PARKING_SPOT:
-            # Check if parking is end
-            position_diff = goal.position - self.position
-            yaw_diff = goal.yaw - self.position_yaw
-            
-            rot_ref = goal.yaw * np.array(-position_diff)
+        if goal is not None:
+            if goal.mode == PARKING_SPOT:
+                # Check if a car is in the parking lot
+                position_diff = goal.position - self.position
+                yaw_diff = goal.yaw - self.position_yaw
+                
+                rot_ref = goal.yaw * np.array(-position_diff)
 
-            if abs(rot_ref[0]) <= goal.tolarance[0] and abs(rot_ref[1]) <= goal.tolarance[1] and abs(yaw_diff) <= goal.tolarance[2]:
-                check_flag = 1
-            
-        elif goal.mode == STOP_LINE:
-            # Check if a car passes stop line
-            position_diff = goal.position - self.head
-            angle = goal.yaw - math.atan2(-position_diff[0], -position_diff[1])
-            unit_vector_diff = np.array([math.cos(angle), math.sin(angle)])
-            dist = np.linalg.norm(position_diff)
+                if abs(rot_ref[0]) <= goal.tolarance[0] and abs(rot_ref[1]) <= goal.tolarance[1] and abs(yaw_diff) <= goal.tolarance[2]:
+                    check_flag = 1
+                
+            elif goal.mode == STOP_LINE:
+                # Check if a car passes stop line
+                position_diff = goal.position - self.head
+                angle = goal.yaw - math.atan2(-position_diff[0], -position_diff[1])
+                unit_vector_diff = np.array([math.cos(angle), math.sin(angle)])
+                dist = np.linalg.norm(position_diff)
 
-            if np.dot(self.position_unit_vector, goal.unit_vector)<=0\
-                and np.dot(unit_vector_diff, goal.unit_vector)<=0\
-                and dist <= goal.tolarance[0]:
-                check_flag = 1
-                     
+                if np.dot(self.position_unit_vector, goal.unit_vector)<=0\
+                    and np.dot(unit_vector_diff, goal.unit_vector)<=0\
+                    and dist <= goal.tolarance[0]:
+                    check_flag = 1
+                        
+            else:
+                rospy.loginfo("WRONG GOAL FORMAT !!!")
         else:
-            rospy.loginfo("WRONG GOAL FORMAT !!!")
+            pass
 
         return check_flag
 
     # Check if a car is in Mission area
     def reached(self):
-        reached_target = None
+        self.reached_target = None
         for target in self.goal_list:
             if self.check(target) == 1:
-                reached_target = target
+                self.reached_target = target
                 break
-        return reached_target
 
 if __name__ == "__main__":
     try:
