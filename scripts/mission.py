@@ -2,7 +2,6 @@
 
 # -*- coding: utf-8 -*-
 
-from ast import arg
 from tkinter import X
 import rospy
 import time
@@ -33,6 +32,7 @@ class Mission():
     def __init__(self):
         self.position = np.array([0,0])
         self.position_yaw = 0
+        self.position_unit_vector = np.array([0,0])
 
         self.head = np.array([0,0])
         self.head_yaw = 0
@@ -44,7 +44,7 @@ class Mission():
         self.stop_spots = []
 
         self.goal_list = [
-                        # 더 추가할 예정
+                        # TBD
                         Goal(mode=PARKING_SPOT, position=np.array([100.0, 50.0]), yaw=math.radians(180)),
                         Goal(mode=PARKING_SPOT, position=np.array([100.0, 50.0]), yaw=math.radians(45)),
                         Goal(mode=STOP_LINE, position=np.array([100.0, 50.0]), yaw=math.radians(180)),
@@ -55,7 +55,7 @@ class Mission():
         rospy.init_node('mission', anonymous=True)
         rospy.Subscriber("/car_center", CenterPose, self.position_callback, queue_size=1)
         rospy.Subscriber("/car_head", HeadPose, self.head_callback, queue_size=1)
-        rospy.Subscriber("/car_speed", AckermannDrive, self.speed_callback, queue_size=1)
+        rospy.Subscriber("/drive", AckermannDrive, self.speed_callback, queue_size=1)
         self.traffic = rospy.Publisher("/traffic", Traffic, queue_size=1)
 
         # Thread settings
@@ -65,17 +65,17 @@ class Mission():
 
     def main(self):
         self.parking_mission()
-        self.traffic_misison()
+        # self.traffic_misison()
         self.check()
         pass
 
     def position_callback(self, data):
-        self.position = np.array(data.pose[0], data.pose[1])
+        self.position = np.array([data.pose[0], data.pose[1]])
         self.position_yaw = data.pose[2] # yaw angle
         self.position_unit_vector = np.array([math.cos(data.pose[2]), math.sin(data.pose[2])]) # yaw unit vector
         
     def head_callback(self, data):
-        self.head = np.array(data.pose[0], data.pose[1])
+        self.head = np.array([data.pose[0], data.pose[1]])
         self.head_yaw = data.pose[2] # yaw angle
         self.head_unit_vector = np.array([math.cos(data.pose[2]), math.sin(data.pose[2])]) # yaw unit vector
 
@@ -83,7 +83,7 @@ class Mission():
         self.speed = data.speed
 
     def parking_mission(self):
-        # self.t.x 는 미션 위치의 x좌표 / self.t.y 는 미션 위치의 y좌표 / self.t.yaw 는 미션 위치의 yaw
+        # self.t.x = x coordinate / self.t.y = y coordinate / self.t.yaw = yaw angle (degree)
         if self.t is not None:
             if self.t.mode == PARKING_SPOT and self.speed == 0:
                 parking_succeed = 1
@@ -117,19 +117,21 @@ class Mission():
             self.success_flag += stop_succeed
             self.stop_spots.append(stop_spot)
 
-    def check(self, goal):
+    def check(self, goal=Goal):
         check_flag = 0
 
         if goal.mode == PARKING_SPOT:
+            # Check if parking is end
             position_diff = goal.position - self.position
             yaw_diff = goal.yaw - self.position_yaw
             
-            rot_ref = goal.rotation * np.array(-1*position_diff)
+            rot_ref = goal.yaw * np.array(-position_diff)
 
             if abs(rot_ref[0]) <= goal.tolarance[0] and abs(rot_ref[1]) <= goal.tolarance[1] and abs(yaw_diff) <= goal.tolarance[2]:
                 check_flag = 1
             
         elif goal.mode == STOP_LINE:
+            # Check if a car passes stop line
             position_diff = goal.position - self.head
             angle = goal.yaw - math.atan2(-position_diff[0], -position_diff[1])
             unit_vector_diff = np.array([math.cos(angle), math.sin(angle)])
@@ -145,6 +147,7 @@ class Mission():
 
         return check_flag
 
+    # Check if a car is in Mission area
     def reached(self):
         reached_target = None
         for target in self.goal_list:

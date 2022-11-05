@@ -15,24 +15,23 @@ class Goal:
         self.yaw = yaw
         self.unit_vector = np.array([math.cos(yaw), math.sin(yaw)])
         self.flag = flag
+        self.tolarance = [0,0,0]
 
         # self.x_tol = x_tol
         # self.y_tol = y_tol
         # self.yaw_tol = yaw_tol
+        self.init_tolarance()
 
-    def tolarance(self):
-        tolarance = []
+    def init_tolarance(self):
         if self.mode == PARKING_SPOT:
-            tolarance[0] = 1 #x_tol
-            tolarance[1] = 1 #y_tol 
-            tolarance[2] = math.radians(30) #yaw_tol
+            self.tolarance[0] = 1 #x_tol
+            self.tolarance[1] = 1 #y_tol 
+            self.tolarance[2] = math.radians(30) #yaw_tol
 
         elif self.mode == STOP_LINE:
-            tolarance[0] = 1 #distnace
-            tolarance[1] = None #empty
-            tolarance[2] = None #empty
-
-        return tolarance
+            self.tolarance[0] = 1 #distnace
+            self.tolarance[1] = None #empty
+            self.tolarance[2] = None #empty
 
     def rotation(self):
         A = np.array([[math.cos(self.yaw), math.sin(self.yaw)], [-math.sin(self.yaw), math.cos(self.yaw)]])
