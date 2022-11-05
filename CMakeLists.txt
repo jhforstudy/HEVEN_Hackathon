@@ -56,6 +56,7 @@ if(DEFINED CATKIN_DEVEL_PREFIX)
       CenterPose.msg
       HeadPose.msg
       Traffic.msg
+      Complete.msg
   )
   generate_messages(
       DEPENDENCIES

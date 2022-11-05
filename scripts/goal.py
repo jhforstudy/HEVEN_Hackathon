@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import math
 import numpy as np
 
@@ -17,16 +19,14 @@ class Goal:
         self.flag = flag
         self.tolarance = [0,0,0]
 
-        # self.x_tol = x_tol
-        # self.y_tol = y_tol
-        # self.yaw_tol = yaw_tol
         self.init_tolarance()
 
     def init_tolarance(self):
+        # tolerence is TBD -> according to the size of the map
         if self.mode == PARKING_SPOT:
             self.tolarance[0] = 1 #x_tol
             self.tolarance[1] = 1 #y_tol 
-            self.tolarance[2] = math.radians(30) #yaw_tol
+            self.tolarance[2] = math.radians(15) #yaw_tol
 
         elif self.mode == STOP_LINE:
             self.tolarance[0] = 1 #distnace

@@ -25,6 +25,10 @@
   <node pkg="racecar_simulator" name="visualize" type="visualize.py" output="screen">
     <param name="map_number" value="$(arg map_number)"/>
   </node>
+  <!-- Mission node -->
+  <node pkg="racecar_simulator" name="visualize" type="mission.py" output="screen">
+    <param name="map_number" value="$(arg map_number)"/>
+  </node>
   <!-- Rviz -->
   <node type="rviz" name="rviz" pkg="rviz" args="-d $(find racecar_simulator)/rviz/racecar_rviz.rviz"/>
   

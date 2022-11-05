@@ -26,7 +26,7 @@ class Param():
 
         # Direction of first parking mission (1 or 2 or 3 or 4)
         self.map_3_parking_first_dir = 4
-        # Direction of first parking mission (5 or 6 or 7 or 8)
+        # Direction of second parking mission (5 or 6 or 7 or 8)
         self.map_3_parking_second_dir = 7
 
         # Center point of parking lot (First parking mission)
