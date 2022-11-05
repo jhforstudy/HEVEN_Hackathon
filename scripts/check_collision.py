@@ -11,7 +11,7 @@ import os
 from math import pi
 from sensor_msgs.msg import LaserScan
 from geometry_msgs.msg import Pose
-from racecar_simulator.msg import CenterPose
+from racecar_simulator.msg import CenterPose, Complete
 from parameter_list import Param
 from ackermann_msgs.msg import AckermannDrive
 from tf.transformations import quaternion_from_euler
@@ -41,9 +41,13 @@ class CheckCollide():
         # Index of Spawn list
         self.spawn_index = 0
         rospy.Subscriber('scan', LaserScan, self.callback)
+        rospy.Subscriber('complete', Complete, self.complete_callback)
 
     def callback(self, data):
         self.lidar_data = np.array(data.ranges)
+    
+    def complete_callback(self, data):
+        self.spawn_index += 1
 
 
 class CheckEnd():

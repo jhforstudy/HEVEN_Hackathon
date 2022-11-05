@@ -29,38 +29,46 @@ class Param():
         # Direction of second parking mission in MAP 3 (5 or 6 or 7 or 8)
         self.map_3_parking_second_dir = 7
 
-        # Center point of parking lot (First parking mission)
-        self.PARKING_LOT_X_1 = 1.647
-        self.PARKING_LOT_Y_1 = -20.683
-
-        self.PARKING_LOT_X_2 = 0.497
-        self.PARKING_LOT_Y_2 = -20.683
-
-        self.PARKING_LOT_X_3 = 12.026
-        self.PARKING_LOT_Y_3 = -20.683
-
-        self.PARKING_LOT_X_4 = 13.226
-        self.PARKING_LOT_Y_4 = -20.683
-
-        # Center point of parking lot (Second parking mission)
-        self.PARKING_LOT_X_5 = 13.226
-        self.PARKING_LOT_Y_5 = -48.55
-
-        self.PARKING_LOT_X_6 = 12.026
-        self.PARKING_LOT_Y_6 = -48.55
-
-        self.PARKING_LOT_X_7 = 0.497
-        self.PARKING_LOT_Y_7 = -48.55
-
-        self.PARKING_LOT_X_8 = 1.647
-        self.PARKING_LOT_Y_8 = -48.55
-
         # Size of parking lot
         self.PARKING_LOT_WIDTH = 0.55
         self.PARKING_LOT_HEIGHT = 0.8
 
         # Tilt degree of parking lot
         self.PARKING_LOT_TILT_DEGREE = 45
+
+        # Center point of parking lot (First parking mission)
+        self.PARKING_LOT_X_1 = 0.497
+        self.PARKING_LOT_Y_1 = -20.683
+        self.PARKING_LOT_YAW_1 = -90
+
+        self.PARKING_LOT_X_2 = 1.647
+        self.PARKING_LOT_Y_2 = -20.683
+        self.PARKING_LOT_YAW_2 = -90
+
+        self.PARKING_LOT_X_3 = 12.026
+        self.PARKING_LOT_Y_3 = -20.683
+        self.PARKING_LOT_YAW_3 = -90
+
+        self.PARKING_LOT_X_4 = 13.226
+        self.PARKING_LOT_Y_4 = -20.683
+        self.PARKING_LOT_YAW_4 = -90
+
+        # Center point of parking lot (Second parking mission)
+        self.PARKING_LOT_X_5 = 13.226
+        self.PARKING_LOT_Y_5 = -48.55
+        self.PARKING_LOT_YAW_5 = 90 + self.PARKING_LOT_TILT_DEGREE
+
+        self.PARKING_LOT_X_6 = 12.026
+        self.PARKING_LOT_Y_6 = -48.55
+        self.PARKING_LOT_YAW_6 = 90 + self.PARKING_LOT_TILT_DEGREE
+
+        self.PARKING_LOT_X_7 = 1.647
+        self.PARKING_LOT_Y_7 = -48.55
+        self.PARKING_LOT_YAW_7 = 90 + self.PARKING_LOT_TILT_DEGREE
+
+        self.PARKING_LOT_X_8 = 0.497
+        self.PARKING_LOT_Y_8 = -48.55
+        self.PARKING_LOT_YAW_8 = 90 + self.PARKING_LOT_TILT_DEGREE
 
         # Spawn lists (x, y, yaw - degree)
         self.MAP_1_SPAWN_POINT = [(0,0,0)]

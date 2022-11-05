@@ -10,7 +10,7 @@ STOP_LINE = 1
 
 
 class Goal:
-    def __init__(self, mode=PARKING_SPOT, position=np.array(None, None), yaw=None, flag=0):
+    def __init__(self, mode=PARKING_SPOT, position=np.array(None, None), yaw=None, flag=0, number=1):
         
         self.mode = mode
         self.position = position
@@ -18,6 +18,7 @@ class Goal:
         self.unit_vector = np.array([math.cos(yaw), math.sin(yaw)])
         self.flag = flag
         self.tolarance = [0,0,0]
+        self.number = number
 
         self.init_tolarance()
 
