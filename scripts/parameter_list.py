@@ -21,6 +21,7 @@ class Param():
         self.END_POINT_X_3 = 26.21
         self.END_POINT_Y_3 = -62.39
         
+        self.STOP_LINE_TIME = 5
         # Direction of traffic in MAP 2 ("LEFT" or "RIGHT")
         self.map_2_traffic_dir = "RIGHT"
 
@@ -80,6 +81,13 @@ class Param():
         self.PARKING_LOT_Y_8 = -48.55
         self.PARKING_LOT_YAW_8 = 90 + self.PARKING_LOT_TILT_DEGREE
 
+        self.MAP_3_STOP_LINE_X_1 = 8.278
+        self.MAP_3_STOP_LINE_Y_1 = -12.154
+        self.MAP_3_STOP_LINE_YAW_1 = -90
+        self.MAP_3_STOP_LINE_X_2 = 26.236
+        self.MAP_3_STOP_LINE_Y_2 = -51.142
+        self.MAP_3_STOP_LINE_YAW_2 = -90
+
         # Spawn lists (x, y, yaw - degree)
         self.MAP_1_SPAWN_POINT = [(0,0,0)]
         if self.map_2_traffic_dir == "LEFT":
@@ -87,13 +95,13 @@ class Param():
         elif self.map_2_traffic_dir == "RIGHT":
             self.MAP_2_SPAWN_POINT = [(0,0,0),(-4,-18.45,90),(-0.669,-15.835,0)]
         self.MAP_3_SPAWN_POINT = [(0,0,0)]
-
+        self.MAP_3_SPAWN_POINT.append(((8.288, -13.565, -90)))
         # Spawn points (First parking mission)
         if self.map_3_parking_first_dir == 1 or self.map_3_parking_first_dir == 2:
             self.MAP_3_SPAWN_POINT.append((1.947,-15.683,0))
         elif self.map_3_parking_first_dir == 3 or self.map_3_parking_first_dir == 4:
             self.MAP_3_SPAWN_POINT.append((13.837,-15.683,0))
-
+        self.MAP_3_SPAWN_POINT.append(((25.280, -53.591, 180)))
         # Spawn points (Second parking mission)
         if self.map_3_parking_second_dir == 5 or self.map_3_parking_second_dir == 6:
             self.MAP_3_SPAWN_POINT.append((11.526,-53.659,180))

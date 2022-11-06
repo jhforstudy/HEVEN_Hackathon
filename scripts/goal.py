@@ -30,7 +30,7 @@ class Goal:
             self.tolarance[2] = math.radians(15) #yaw_tol
 
         elif self.mode == STOP_LINE:
-            self.tolarance[0] = 1 #distnace
+            self.tolarance[0] = 0.6 #distnace
             self.tolarance[1] = None #empty
             self.tolarance[2] = None #empty
 

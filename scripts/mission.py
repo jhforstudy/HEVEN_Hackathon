@@ -51,6 +51,13 @@ def GetCurrentParkingLot():
 
     return l
 
+def GetStopLine():
+    l = [None, None]
+    l[0] = (param.MAP_3_STOP_LINE_X_1, param.MAP_3_STOP_LINE_Y_1, param.MAP_3_STOP_LINE_YAW_1)
+    l[1] = (param.MAP_3_STOP_LINE_X_2, param.MAP_3_STOP_LINE_Y_2, param.MAP_3_STOP_LINE_YAW_2)
+
+    return l
+
 def dis(pos_1=np.array, pos_2=np.array):
     position_diff = pos_1 - pos_2
     dist = np.linalg.norm(position_diff)
@@ -109,6 +116,7 @@ class Mission():
 
         # Get the 2 points of parking lot from parameter_list.py
         park_target_list = GetCurrentParkingLot()
+        stop_line_list = GetStopLine()
 
         # ROS settings
         rospy.init_node('mission', anonymous=True)
@@ -129,8 +137,8 @@ class Mission():
                             # TBD
                             Goal(mode=PARKING_SPOT, position=np.array(park_target_list[0][:2]), yaw=math.radians(park_target_list[0][2]), number=1),
                             Goal(mode=PARKING_SPOT, position=np.array(park_target_list[1][:2]), yaw=math.radians(park_target_list[1][2]), number=2),
-                            Goal(mode=STOP_LINE, position=np.array([100.0, 50.0]), yaw=math.radians(180), number=1),
-                            Goal(mode=STOP_LINE, position=np.array([100.0, 50.0]), yaw=math.radians(180), number=2)
+                            Goal(mode=STOP_LINE, position=np.array(stop_line_list[0][:2]), yaw=math.radians(stop_line_list[0][2]), number=1),
+                            Goal(mode=STOP_LINE, position=np.array(stop_line_list[1][:2]), yaw=math.radians(stop_line_list[1][2]), number=2)
                             ]
         else:
             rospy.loginfo("Incorrect map_number when making a Goal list!")
@@ -150,6 +158,7 @@ class Mission():
         # Check if a car is any mission area
         # if true, return self.check_flag = 1
         self.reached()
+        print(self.check_flag)
         # If any mission starts
         if self.check_flag == 1:
             # map 2
@@ -196,9 +205,9 @@ class Mission():
                             # After start parking
                             else:
                                 self.parking_mission(self.t)
-                elif self.t.mode == STOP_LINE:
 
-                    # First parking
+                elif self.t.mode == STOP_LINE:
+                    # First stop
                     if self.t.number == 1:
                         if self.num_success_stop == 1:
                             # Already Succeed
@@ -211,7 +220,7 @@ class Mission():
                             # After start parking
                             else:
                                 self.stop_mission(self.t)
-                    # Second parking
+                    # Second stop
                     elif self.t.number == 2:
                         if self.num_success_stop == 2:
                             # Already Succeed
@@ -224,14 +233,6 @@ class Mission():
                             # After start parking
                             else:
                                 self.stop_mission(self.t)
-
-                    # self.publish_traffic("stop")
-                    # # TBD
-                    # if self.stop_start == False:
-                    #     self.stop_index = 0
-                    #     self.stop_start = True
-                    # else:
-                    #     self.stop_mission(self.t)
                 else:
                     rospy.loginfo("WRONG GOAL FORMAT !!!")
 
@@ -240,13 +241,13 @@ class Mission():
 
     def position_callback(self, data):
         self.position = np.array([data.pose[0], data.pose[1]])
-        self.position_yaw = data.pose[2] # yaw angle
-        self.position_unit_vector = np.array([math.cos(data.pose[2]), math.sin(data.pose[2])]) # yaw unit vector
+        self.position_yaw = (data.pose[2]) # yaw angle
+        self.position_unit_vector = np.array([math.cos(math.radians(data.pose[2])), math.sin(math.radians(data.pose[2]))]) # yaw unit vector
         
     def head_callback(self, data):
         self.head = np.array([data.pose[0], data.pose[1]])
         self.head_yaw = data.pose[2] # yaw angle
-        self.head_unit_vector = np.array([math.cos(data.pose[2]), math.sin(data.pose[2])]) # yaw unit vector
+        self.head_unit_vector = np.array([math.cos(math.radians(data.pose[2])), math.sin(math.radians(data.pose[2]))]) # yaw unit vector
 
     def speed_callback(self, data):
         self.speed = data.speed
@@ -303,41 +304,51 @@ class Mission():
     #### left time and stop publish
     def stop_mission(self, goal=Goal):
         stop_spot = goal.position
-        stop_flag = 0
-        traffic = Traffic()
+        traffic_msg = Traffic()
         
         if self.stop_index == 0:
             # check if a car is stopped
             if goal.mode == STOP_LINE and self.speed == 0:
+                rospy.loginfo("Stopped...")
                 self.stop_time = time.time()
                 self.stop_index += 1
         
         elif self.stop_index == 1:
             # After a car stopped
-            if time.time() - self.stop_time >= 3:
+            if time.time() - self.stop_time >= param.STOP_LINE_TIME:
                 # Stop success
                 rospy.loginfo("Stop mission success!")
-                stop_flag = 1
+                self.stop_flag = 1
                 self.stop_index += 1
+                self.stop_success = True
 
-            elif time.time() - self.stop_time < 3 and self.speed != 0:
+            elif time.time() - self.stop_time < param.STOP_LINE_TIME and self.speed != 0:
                 # Stop fail
                 rospy.loginfo("Stop mission failed...")
-                stop_spot = None
+                self.stop_flag = 0
                 self.stop_index += 1
+            
+            else:
+                rospy.loginfo("Trying to stop...")
+            
+            traffic_msg.traffic = "STOP"
+            traffic_msg.second = param.STOP_LINE_TIME - (time.time() - self.stop_time)
+            self.traffic.publish(traffic_msg)
 
         elif self.stop_index == 2:
             # stop mission failed, break the function
             if stop_spot is None:
                 self.stop_start = False
+                self.stop_index = 0
             # stop misison success
             else:
                 self.stop_index += 1
         
         elif self.stop_index == 3:
             # Stop mission finally end
-            self.num_success_stop += stop_flag
-            self.stopped_spots.append(stop_spot)
+            self.num_success_stop += self.stop_flag
+            if self.stop_success:
+                self.stopped_spots.append(stop_spot)
         
             # publish that stop mission is succeed
             complete_msg = Complete()
@@ -346,31 +357,14 @@ class Mission():
             
             # Reset the trigger
             self.stop_start = False
-
-        """
-        if self.t is not None:
-            if self.t.mode == STOP_LINE and self.speed == 0:
-                stop_succeed = 1
-                stop_spot = self.t.position
-                while time.time() - self.start_time <= 3:
-                    if self.t.mode != STOP_LINE:
-                        stop_succeed = 0
-                        stop_spot = None
-                        break
-                    else:
-                        pass
-                if stop_spot is not None:
-                    self.complete.publish(True)
-        
-        if stop_spot not in self.stopped_spots:
-            self.success_flag += stop_succeed
-            self.stop_spots.append(stop_spot)
-        """
+            self.stop_flag = 0
+            self.stop_success = False
 
     # Check if traffic mission is end
     def traffic_mission(self, goal=Goal):
         # goal.position[0] = x coordinate / goal.position[1] = y coordinate / goal.yaw = yaw angle (degree)
         traffic_spot = goal.position
+        traffic_msg = Traffic()
         
         if self.traffic_index == 0:
             # Check if a car is stopped
@@ -381,11 +375,10 @@ class Mission():
 
         elif self.traffic_index == 1:
             # After a car stopped
-            if time.time() - self.traffic_start_time >= 3:
+            if time.time() - self.traffic_start_time >= param.STOP_LINE_TIME:
                 # Traffic stop success
                 rospy.loginfo("Stop mission success!")
                 self.traffic_index += 1
-                self.stop_success = True
                 self.stop_flag = 1
                 self.num_success_stop += self.stop_flag
 
@@ -394,11 +387,18 @@ class Mission():
                 complete_msg.complete = True
                 self.complete.publish(complete_msg)
 
-            elif time.time() - self.traffic_start_time < 3 and self.speed != 0:
+            elif time.time() - self.traffic_start_time < param.STOP_LINE_TIME and self.speed != 0:
                 # Traffic fail
                 rospy.loginfo("Stop mission failed...")
                 self.traffic_index = 0
                 self.stop_flag = 0
+
+            else:
+                rospy.loginfo("Trying to stop...")
+            
+            traffic_msg.traffic = "STOP"
+            traffic_msg.second = param.STOP_LINE_TIME - (time.time() - self.traffic_start_time)
+            self.traffic.publish(traffic_msg)
         
         elif self.traffic_index == 2:
             # traffic misison failed, break the function
@@ -429,6 +429,9 @@ class Mission():
                 
                 self.traffic_index += 1
 
+            traffic_msg.traffic = param.map_2_traffic_dir
+            self.traffic.publish(traffic_msg)
+
         elif self.traffic_index == 4:
             if self.traffic_success:
                 self.passed_traffic.append(traffic_spot)
@@ -445,98 +448,6 @@ class Mission():
             self.traffic_start = False
             self.traffic_flag = 0
             self.traffic_success = False
-            self.stop_success = False
-
-        # traffic_spot = goal.position
-        # traffic_flag = 0
-        # if self.stop_index == 0:
-        #     #check if a car is stopped
-        #     if goal.mode == STOP_LINE and self.speed == 0:
-        #         self.stop_time = time.time()
-        #         self.stop_index += 1
-        
-        # elif self.stop_index == 1:
-        #     # After a car stopped
-        #     if time.time() - self.stop_time >= 3:
-        #         # Stop success
-        #         rospy.loginfo("Stop mission success!")
-        #         stop_flag = 1
-        #         self.stop_index += 1
-            
-        #     elif time.time() - self.stop_time < 3 and self.speed != 0:
-        #         # Stop fail
-        #         rospy.loginfo("Stop mission failed...")
-        #         stop_spot = None
-        #         self.stop_index += 1
-
-        # elif self.stop_index == 2:
-        #     # stop mission failed, break the function
-        #     if stop_spot is None:
-        #         self.stop_start = False
-        #     # stop misison success
-        #     else:
-        #         self.stop_index += 1
-        
-        # elif self.stop_index == 3:
-        #     while self.check(goal):
-        #         self.publish_traffic(param.map_2_traffic_dir)
-        # else:
-        #     pass
-        """
-        elif self.stop_index == 2:
-            # stop mission failed, break the function
-            if stop_spot is None:
-                self.stop_start = False
-            # stop misison success
-            else:
-                self.stop_index += 1
-        
-        elif self.stop_index == 3:
-            if stop_spot not in self.stopped_spots:
-                self.success_flag += stop_flag
-                self.stopped_spots.append(stop_spot)
-            
-                # publish that stop mission is succeed
-                complete_msg = Complete()
-                complete_msg.complete = True
-                self.complete.publish(complete_msg)
-        
-
-        if self.t is not None:
-            if self.traffic_index == 0 and self.t.mode == STOP_LINE and self.speed == 0:
-                stop_succeed = 1
-                stop_spot = self.t.position
-                while time.time() - self.start_time <= 3:
-                    if self.t.mode != STOP_LINE:
-                        stop_succeed = 0
-                        stop_spot = None
-                        break
-                    else:
-                        pass
-                if stop_spot is not None:
-                    self.traffic_index += 1
-                
-            while self.traffic_index == 1 and self.t.mode == STOP_LINE:
-                self.traffic.publish(param.map_2_traffic_dir)
-                
-        if self.t is not None:
-            if self.t.mode == STOP_LINE and self.speed == 0:
-                traffic_spot = self.t.position
-                traffic_succeed = 1
-                while time.time() - self.start_time <= 3:
-                    if self.t.mode != STOP_LINE:
-                        traffic_succeed = 0
-                        break
-                    else:
-                        pass
-                if traffic_succeed == 1:
-                    complete_msgs = Complete()
-                    complete_msgs.complete = True
-                    self.complete.publish(complete_msgs)
-        if traffic_spot not in self.num_passed_traffic:
-            self.success_flag += traffic_succeed
-            self.traffic_spots.append(traffic_spot)
-        """
 
     def check(self, goal=Goal):
         check_flag = 0
@@ -554,18 +465,19 @@ class Mission():
             elif goal.mode == STOP_LINE:
                 # Check if a car passes stop line
                 position_diff = goal.position - self.head
-                angle = goal.yaw - math.radians(self.position_yaw)
-                unit_vector_diff = np.array([math.cos(angle), math.sin(angle)])
                 dist = np.linalg.norm(position_diff)
 
                 left_dis = dis(self.head, np.array((param.MAP_2_CHECK_LEFT_X, param.MAP_2_CHECK_LEFT_Y)))
                 right_dis = dis(self.head, np.array((param.MAP_2_CHECK_RIGHT_X, param.MAP_2_CHECK_RIGHT_Y)))
 
-                if np.dot(self.position_unit_vector, goal.unit_vector)<=0\
-                    and np.dot(unit_vector_diff, goal.unit_vector)<=0\
+                # print(unit_vector_diff)
+                # Stop
+                if np.dot(self.head_unit_vector, -goal.unit_vector)<=0\
+                    and np.dot(position_diff, -goal.unit_vector)<=0\
                     and dist <= goal.tolarance[0]:
                     check_flag = 1
 
+                # Check if a car is in check area
                 if left_dis <= 0.5 or right_dis <= 0.5:
                     check_flag = 1
                         
@@ -587,11 +499,6 @@ class Mission():
                 break
         
         self.t = reached_target
-            
-    def show_result(self, parking_spots, stop_spots):
-        """TBD - Show result of mission"""
-        print("Parking spots : ", parking_spots)
-        print("Stop spots : ", stop_spots)
         
     def publish_traffic(self, what):
         traffic = Traffic()
@@ -611,6 +518,7 @@ class Mission():
         # refresh all the flags
         self.num_success_parking = 0
         self.num_success_stop = 0
+        self.num_success_traffic = 0
         self.num_passed_traffic = 0
         self.parking_start = False
         self.stop_start = False
@@ -649,6 +557,12 @@ class Mission():
 
             text_3 = "Stop #1 : "
             text_4 = "Stop #2 : "
+
+            if self.num_success_stop == 1:
+                text_3 += "Success"
+            elif self.num_success_stop == 2:
+                text_3 += "Success"
+                text_4 += "Success"
 
             font = cv2.FONT_HERSHEY_SIMPLEX
 

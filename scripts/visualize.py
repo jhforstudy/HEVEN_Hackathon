@@ -141,7 +141,87 @@ def MakeTrafficMarker(map_number):
             rospy.loginfo("Traffic direction is incorrect.")
 
     elif map_number == 3:
-        pass
+        traffic_stop = Marker()
+        traffic_stop.header.frame_id = "map"
+        traffic_stop.ns = "traffic_stop"
+        traffic_stop.type = Marker.LINE_STRIP
+        traffic_stop.action = Marker.ADD
+        traffic_stop.color.r, traffic_stop.color.g, traffic_stop.color.b = 1, 0, 0
+        traffic_stop.color.a = 1
+        traffic_stop.scale.x = 0.1
+        traffic_stop.scale.y = 0.1
+        traffic_stop.scale.z = 0
+        l_point = Point()
+        l_point.x = 7.534
+        l_point.y = param.MAP_3_STOP_LINE_Y_1
+        l_point.z = 0 
+        r_point = Point()
+        r_point.x = 9.044
+        r_point.y = param.MAP_3_STOP_LINE_Y_1
+        r_point.z = 0
+
+        traffic_stop.points.append(l_point)
+        traffic_stop.points.append(r_point)
+
+        traffic_stop_2 = Marker()
+        traffic_stop_2.header.frame_id = "map"
+        traffic_stop_2.ns = "traffic_stop_2"
+        traffic_stop_2.type = Marker.LINE_STRIP
+        traffic_stop_2.action = Marker.ADD
+        traffic_stop_2.color.r, traffic_stop_2.color.g, traffic_stop_2.color.b = 1, 0, 0
+        traffic_stop_2.color.a = 1
+        traffic_stop_2.scale.x = 0.1
+        traffic_stop_2.scale.y = 0.1
+        traffic_stop_2.scale.z = 0
+        l_point = Point()
+        l_point.x = 25.497
+        l_point.y = param.MAP_3_STOP_LINE_Y_2
+        l_point.z = 0
+        r_point = Point()
+        r_point.x = 27.037
+        r_point.y = param.MAP_3_STOP_LINE_Y_2
+        r_point.z = 0
+
+        traffic_stop_2.points.append(l_point)
+        traffic_stop_2.points.append(r_point)
+
+        stop_sign = Marker()
+        stop_sign.header.frame_id = "map"
+        stop_sign.ns = "stop_sign"
+        stop_sign.type = Marker.CYLINDER
+        stop_sign.action = Marker.ADD
+        stop_sign.color.r, stop_sign.color.g, stop_sign.color.b = 1, 0, 0
+        stop_sign.color.a = 1
+        stop_sign.scale.x = param.SIZE_OF_TROPHY
+        stop_sign.scale.y = param.SIZE_OF_TROPHY
+        stop_sign.scale.z = 0
+        stop_sign.pose.position.x = param.MAP_3_STOP_LINE_X_1
+        stop_sign.pose.position.y = param.MAP_3_STOP_LINE_Y_1 + 1
+        stop_sign.pose.position.z = 0
+        stop_sign.pose.orientation.x = 0.0
+        stop_sign.pose.orientation.y = 0.0
+        stop_sign.pose.orientation.z = 0.0
+        stop_sign.pose.orientation.w = 1.0
+
+        stop_sign_2 = Marker()
+        stop_sign_2.header.frame_id = "map"
+        stop_sign_2.ns = "stop_sign_2"
+        stop_sign_2.type = Marker.CYLINDER
+        stop_sign_2.action = Marker.ADD
+        stop_sign_2.color.r, stop_sign_2.color.g, stop_sign_2.color.b = 1, 0, 0
+        stop_sign_2.color.a = 1
+        stop_sign_2.scale.x = param.SIZE_OF_TROPHY
+        stop_sign_2.scale.y = param.SIZE_OF_TROPHY
+        stop_sign_2.scale.z = 0
+        stop_sign_2.pose.position.x = param.MAP_3_STOP_LINE_X_2
+        stop_sign_2.pose.position.y = param.MAP_3_STOP_LINE_Y_2 + 1
+        stop_sign_2.pose.position.z = 0
+        stop_sign_2.pose.orientation.x = 0.0
+        stop_sign_2.pose.orientation.y = 0.0
+        stop_sign_2.pose.orientation.z = 0.0
+        stop_sign_2.pose.orientation.w = 1.0
+
+        return traffic_stop, traffic_stop_2, stop_sign, stop_sign_2
 
     else:
         rospy.loginfo("Map number is incorrect.")
@@ -263,6 +343,7 @@ if __name__ == "__main__":
     if map_number == 2:
         traffic_marker = MakeTrafficMarker(map_number)
     if map_number == 3:
+        traffic_marker = MakeTrafficMarker(map_number)
         parking_marker = MakeParkinglotMarker()
 
     while not rospy.is_shutdown():
@@ -274,6 +355,8 @@ if __name__ == "__main__":
             for i in traffic_marker:
                 temp_list.append(i)
         elif map_number == 3:
+            for i in traffic_marker:
+                temp_list.append(i)
             for i in parking_marker:
                 temp_list.append(i)
         mkarray_msg = temp_list
