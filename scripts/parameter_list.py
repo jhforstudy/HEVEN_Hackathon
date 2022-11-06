@@ -24,6 +24,16 @@ class Param():
         # Direction of traffic in MAP 2 ("LEFT" or "RIGHT")
         self.map_2_traffic_dir = "RIGHT"
 
+        # Center of stop line
+        self.MAP_2_STOP_LINE_X = -4
+        self.MAP_2_STOP_LINE_Y = -16.45
+
+        # Check point of left or right road
+        self.MAP_2_CHECK_LEFT_X = -6.02
+        self.MAP_2_CHECK_LEFT_Y = -15.87
+        self.MAP_2_CHECK_RIGHT_X = -1.89
+        self.MAP_2_CHECK_RIGHT_Y = -15.87
+
         # Direction of first parking mission in MAP 3 (1 or 2 or 3 or 4)
         self.map_3_parking_first_dir = 4
         # Direction of second parking mission in MAP 3 (5 or 6 or 7 or 8)
@@ -73,9 +83,9 @@ class Param():
         # Spawn lists (x, y, yaw - degree)
         self.MAP_1_SPAWN_POINT = [(0,0,0)]
         if self.map_2_traffic_dir == "LEFT":
-            self.MAP_2_SPAWN_POINT = [(0,0,0),(-7.08,-15.835,180)]
+            self.MAP_2_SPAWN_POINT = [(0,0,0),(-4,-18.45,90),(-7.08,-15.835,180)]
         elif self.map_2_traffic_dir == "RIGHT":
-            self.MAP_2_SPAWN_POINT = [(0,0,0),(-0.669,-15.835,0)]
+            self.MAP_2_SPAWN_POINT = [(0,0,0),(-4,-18.45,90),(-0.669,-15.835,0)]
         self.MAP_3_SPAWN_POINT = [(0,0,0)]
 
         # Spawn points (First parking mission)

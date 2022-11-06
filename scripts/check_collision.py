@@ -91,8 +91,8 @@ def end_detection(pose_data, map_number):
 def init_button():
     # Refresh button
     window = tk.Tk()
-    window.geometry('70x50+0+150')
-    button = tk.Button(window, text='Refresh', command=initialize)
+    window.geometry('70x50+0+350')
+    button = tk.Button(window, text='Car\nInit', command=initialize)
     button.config(width=5, height=2)
     button.place(x=0, y=0)
     window.mainloop()
@@ -133,12 +133,12 @@ if __name__ == "__main__":
         spawn_list = param.MAP_3_SPAWN_POINT
     else:
         rospy.loginfo("Incorrect map number.")
-    time.sleep(1)
 
     # Thread for Init button
     button_thread = threading.Thread(target=init_button)
     button_thread.daemon = True
     button_thread.start()
+    time.sleep(1)
 
     if_terminated = False
     

@@ -188,6 +188,15 @@ def MakeParkinglotMarker():
     parking_lot_4.pose.position.x = param.PARKING_LOT_X_4
     parking_lot_4.pose.position.y = param.PARKING_LOT_Y_4
 
+    if param.map_3_parking_first_dir == 1:
+        parking_lot_1.color.r, parking_lot_1.color.g, parking_lot_1.color.b = 0, 1, 0
+    elif param.map_3_parking_first_dir == 2:
+        parking_lot_2.color.r, parking_lot_2.color.g, parking_lot_2.color.b = 0, 1, 0
+    elif param.map_3_parking_first_dir == 3:
+        parking_lot_3.color.r, parking_lot_3.color.g, parking_lot_3.color.b = 0, 1, 0
+    elif param.map_3_parking_first_dir == 4:
+        parking_lot_4.color.r, parking_lot_4.color.g, parking_lot_4.color.b = 0, 1, 0
+
     tilt_degree = param.PARKING_LOT_TILT_DEGREE * pi / 180
 
     qu_x, qu_y, qu_z, qu_w = quaternion_from_euler(0,0,tilt_degree)
@@ -232,6 +241,15 @@ def MakeParkinglotMarker():
     parking_lot_8.pose.orientation.z = qu_z
     parking_lot_8.pose.orientation.w = qu_w
 
+    if param.map_3_parking_second_dir == 5:
+        parking_lot_5.color.r, parking_lot_5.color.g, parking_lot_5.color.b = 0, 1, 0
+    elif param.map_3_parking_second_dir == 6:
+        parking_lot_6.color.r, parking_lot_6.color.g, parking_lot_6.color.b = 0, 1, 0
+    elif param.map_3_parking_second_dir == 7:
+        parking_lot_7.color.r, parking_lot_7.color.g, parking_lot_7.color.b = 0, 1, 0
+    elif param.map_3_parking_second_dir == 8:
+        parking_lot_8.color.r, parking_lot_8.color.g, parking_lot_8.color.b = 0, 1, 0
+
     return parking_lot_1, parking_lot_2, parking_lot_3, parking_lot_4, parking_lot_5, parking_lot_6, parking_lot_7, parking_lot_8
 
 if __name__ == "__main__":
@@ -242,7 +260,8 @@ if __name__ == "__main__":
     map_number = rospy.get_param('~map_number')
 
     goal_marker = MakeGoalMarker(map_number)
-    traffic_marker = MakeTrafficMarker(map_number)
+    if map_number == 2:
+        traffic_marker = MakeTrafficMarker(map_number)
     if map_number == 3:
         parking_marker = MakeParkinglotMarker()
 
@@ -251,10 +270,10 @@ if __name__ == "__main__":
         mkarray_msg = MarkerArray()
         temp_list = []
         temp_list.append(goal_marker)
-        if traffic_marker is not None:
+        if map_number == 2:
             for i in traffic_marker:
                 temp_list.append(i)
-        if map_number == 3:
+        elif map_number == 3:
             for i in parking_marker:
                 temp_list.append(i)
         mkarray_msg = temp_list
