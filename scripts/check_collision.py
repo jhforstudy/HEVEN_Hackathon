@@ -4,7 +4,7 @@ import rospy
 import numpy as np
 import time
 import cv2
-import tkinter as tk
+import Tkinter as tk
 import threading
 import os
 
