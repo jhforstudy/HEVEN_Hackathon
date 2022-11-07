@@ -5,7 +5,7 @@ import time
 import math
 import numpy as np
 import threading
-import tkinter as tk
+import Tkinter as tk
 import cv2
 from goal import PARKING_SPOT, STOP_LINE, Goal
 from parameter_list import Param
