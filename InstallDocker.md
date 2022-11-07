@@ -54,4 +54,13 @@ http://127.0.0.1:6080/
 아래의 문구와 함께 **Brain.py**가 실행됨
 ![5](https://user-images.githubusercontent.com/48710703/199909682-9c98e999-167f-4233-93a8-761018de8c94.PNG)
                        
-
+### 3. 차량 수동 조작
+* `Joystick.sh`을 더블 클릭하고,<br>
+**Execute in terminal** 클릭
+아래의 문구와 함께 조이스틱이 실행됨<br>
+&nbsp;&nbsp;&nbsp;&nbsp;좌/우 화살표 - 차량 조향각 왼쪽/오른쪽 증가<br>
+&nbsp;&nbsp;&nbsp;&nbsp;상/하 화살표 - 차량 속도 높임/낮춤<br>
+&nbsp;&nbsp;&nbsp;&nbsp;스페이스 바 - 차량 정지<br>
+&nbsp;&nbsp;&nbsp;&nbsp;탭 키 - 조향각 초기화<br>
+**주의** : Brain.sh 와 따로 사용할 것
+![캡처](https://user-images.githubusercontent.com/48710703/200274414-608ace90-05d1-4a65-8747-ead89e63efd6.PNG)
