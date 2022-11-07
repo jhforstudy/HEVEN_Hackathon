@@ -536,6 +536,9 @@ class Mission():
         self.parking_start = False
         self.stop_start = False
         self.traffic_start = False
+        self.stop_index = 0
+        self.parking_index = 0
+        self.traffic_index = 0
 
     def visualize_mission(self):
         # Show the status of missions
