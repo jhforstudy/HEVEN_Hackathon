@@ -112,8 +112,10 @@ class Mission():
         self.num_success_stop = [0,0]
 
         # If spawn point is updated
-        self.parking_updated = False
-        self.stop_updated = False
+        self.parking_updated_1 = False
+        self.parking_updated_2 = False
+        self.stop_updated_1 = False
+        self.stop_updated_2 = False
 
         # Current goal
         self.t = None
@@ -285,12 +287,18 @@ class Mission():
                 self.parking_index = 0
                 self.parking_start = False
 
-                if not self.parking_updated:
+                if goal.number == 1 and (not self.parking_updated_1):
                     # Spawn index
                     complete_msg = Complete()
                     complete_msg.complete = True
                     self.complete.publish(complete_msg)
-                    self.parking_updated = True
+                    self.parking_updated_1 = True
+                elif goal.number == 2 and (not self.parking_updated_2):
+                    # Spawn index
+                    complete_msg = Complete()
+                    complete_msg.complete = True
+                    self.complete.publish(complete_msg)
+                    self.parking_updated_2 = True
         
             else:
                 rospy.loginfo("Trying to park...")
@@ -308,7 +316,12 @@ class Mission():
                 self.num_success_parking[goal.number - 1] += self.parking_flag
                 self.parked_spots.append(parking_spot)
             
-            if not self.parking_updated:
+            if goal.number == 1 and (not self.parking_updated_1):
+                # Spawn index
+                complete_msg = Complete()
+                complete_msg.complete = True
+                self.complete.publish(complete_msg)
+            elif goal.number == 2 and (not self.parking_updated_2):
                 # Spawn index
                 complete_msg = Complete()
                 complete_msg.complete = True
@@ -318,7 +331,10 @@ class Mission():
             self.parking_start = False
             self.parking_flag = 0
             self.parking_success = False
-            self.parking_updated = False
+            if goal.number == 1:
+                self.parking_updated_1 = False
+            elif goal.number == 2:
+                self.parking_updated_2 = False
             self.parking_index = 0
 
     #### left time and stop publish
@@ -353,12 +369,18 @@ class Mission():
                 self.stop_index += 1
                 self.stop_start = False
 
-                if not self.stop_updated:
+                if goal.number == 1 and (not self.stop_updated_1):
                     # Spawn index
                     complete_msg = Complete()
                     complete_msg.complete = True
                     self.complete.publish(complete_msg)
-                    self.stop_updated = True
+                    self.stop_updated_1 = True
+                elif goal.number == 2 and (not self.stop_updated_2):
+                    # Spawn index
+                    complete_msg = Complete()
+                    complete_msg.complete = True
+                    self.complete.publish(complete_msg)
+                    self.stop_updated_2 = True
             
             else:
                 rospy.loginfo("Trying to stop...")
@@ -382,7 +404,12 @@ class Mission():
             if self.stop_success:
                 self.stopped_spots.append(stop_spot)
 
-            if not self.stop_updated:
+            if goal.number == 1 and (not self.stop_updated_1):
+                # Spawn index
+                complete_msg = Complete()
+                complete_msg.complete = True
+                self.complete.publish(complete_msg)
+            elif goal.number == 2 and (not self.stop_updated_2):
                 # Spawn index
                 complete_msg = Complete()
                 complete_msg.complete = True
@@ -392,7 +419,10 @@ class Mission():
             self.stop_start = False
             self.stop_flag = 0
             self.stop_success = False
-            self.stop_updated = False
+            if goal.number == 1:
+                self.stop_updated_1 = False
+            elif goal.number == 2:
+                self.stop_updated_2 = False
             self.stop_index = 0
 
     # Check if traffic mission is end
