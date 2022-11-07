@@ -33,7 +33,7 @@ http://127.0.0.1:6080/
 ### 1. 시뮬레이터 실행
 
 * 실행해야 할 맵에 따라 `Map1.sh`, `Map2.sh`, `Map3.sh`을 더블 클릭하고,<br>
-**Execute in terminal** 클릭
+**Execute in terminal** 클릭<br>
 ![캡처3](https://user-images.githubusercontent.com/48710703/199907347-0ea16bc2-b3c3-4a2b-aaeb-b652642cb594.PNG)
 
 * 시뮬레이터 기능<br>
@@ -50,14 +50,15 @@ http://127.0.0.1:6080/
 ### 2. 알고리즘 테스트
 
 * `Brain.sh`을 더블 클릭하고,<br>
-**Execute in terminal** 클릭
+**Execute in terminal** 클릭<br>
 아래의 문구와 함께 **Brain.py**가 실행됨
 ![5](https://user-images.githubusercontent.com/48710703/199909682-9c98e999-167f-4233-93a8-761018de8c94.PNG)
                        
 ### 3. 차량 수동 조작
 * `Joystick.sh`을 더블 클릭하고,<br>
-**Execute in terminal** 클릭
+**Execute in terminal** 클릭<br>
 아래의 문구와 함께 조이스틱이 실행됨<br>
+열린 터미널을 클릭한 후,<br>
 &nbsp;&nbsp;&nbsp;&nbsp;좌/우 화살표 - 차량 조향각 왼쪽/오른쪽 증가<br>
 &nbsp;&nbsp;&nbsp;&nbsp;상/하 화살표 - 차량 속도 높임/낮춤<br>
 &nbsp;&nbsp;&nbsp;&nbsp;스페이스 바 - 차량 정지<br>
