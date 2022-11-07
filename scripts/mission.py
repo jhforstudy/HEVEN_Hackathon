@@ -111,6 +111,10 @@ class Mission():
         self.num_success_parking = [0,0]
         self.num_success_stop = [0,0]
 
+        # If spawn point is updated
+        self.parking_updated = False
+        self.stop_updated = False
+
         # Current goal
         self.t = None
 
@@ -278,8 +282,15 @@ class Mission():
                 # Parking fail
                 rospy.loginfo("Parking mission failed...")
                 self.parking_flag = 0
-                parking_spot = None
-                self.parking_index += 1
+                self.parking_index = 0
+                self.parking_start = False
+
+                if not self.parking_updated:
+                    # Spawn index
+                    complete_msg = Complete()
+                    complete_msg.complete = True
+                    self.complete.publish(complete_msg)
+                    self.parking_updated = True
         
             else:
                 rospy.loginfo("Trying to park...")
@@ -297,7 +308,8 @@ class Mission():
                 self.num_success_parking[goal.number - 1] += self.parking_flag
                 self.parked_spots.append(parking_spot)
             
-                # publish that parking mission is succeed
+            if not self.parking_updated:
+                # Spawn index
                 complete_msg = Complete()
                 complete_msg.complete = True
                 self.complete.publish(complete_msg)
@@ -306,6 +318,8 @@ class Mission():
             self.parking_start = False
             self.parking_flag = 0
             self.parking_success = False
+            self.parking_updated = False
+            self.parking_index = 0
 
     #### left time and stop publish
     def stop_mission(self, goal=Goal):
@@ -337,6 +351,14 @@ class Mission():
                 rospy.loginfo("Stop mission failed...")
                 self.stop_flag = 0
                 self.stop_index += 1
+                self.stop_start = False
+
+                if not self.stop_updated:
+                    # Spawn index
+                    complete_msg = Complete()
+                    complete_msg.complete = True
+                    self.complete.publish(complete_msg)
+                    self.stop_updated = True
             
             else:
                 rospy.loginfo("Trying to stop...")
@@ -359,7 +381,9 @@ class Mission():
             self.num_success_stop[goal.number - 1] += self.stop_flag
             if self.stop_success:
                 self.stopped_spots.append(stop_spot)
-                # publish that stop mission is succeed
+
+            if not self.stop_updated:
+                # Spawn index
                 complete_msg = Complete()
                 complete_msg.complete = True
                 self.complete.publish(complete_msg)
@@ -368,6 +392,8 @@ class Mission():
             self.stop_start = False
             self.stop_flag = 0
             self.stop_success = False
+            self.stop_updated = False
+            self.stop_index = 0
 
     # Check if traffic mission is end
     def traffic_mission(self, goal=Goal):
@@ -539,6 +565,8 @@ class Mission():
         self.stop_index = 0
         self.parking_index = 0
         self.traffic_index = 0
+        self.parking_updated = False
+        self.stop_updated = False
 
     def visualize_mission(self):
         # Show the status of missions
@@ -572,7 +600,7 @@ class Mission():
 
             if self.num_success_parking[0] == 1:
                 text_1 += "Success"
-            elif self.num_success_parking[1] == 1:
+            if self.num_success_parking[1] == 1:
                 text_2 += "Success"
 
             text_3 = "Stop #1 : "
@@ -580,7 +608,7 @@ class Mission():
 
             if self.num_success_stop[0] == 1:
                 text_3 += "Success"
-            elif self.num_success_stop[1] == 1:
+            if self.num_success_stop[1] == 1:
                 text_4 += "Success"
 
             font = cv2.FONT_HERSHEY_SIMPLEX
