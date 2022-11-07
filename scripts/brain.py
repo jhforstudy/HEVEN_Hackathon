@@ -13,29 +13,36 @@ param = Param()
 
 
 class Brain():
-    def __init__(self, db):
+    def __init__(self, db=Database):
         self.db = db
     
     def main(self):
         '''
-        # How to call sensor data
+        # 1. How to call sensor data?
         lidar_data = self.db.lidar_data
 
-        # How to call pose data
-        pose_data = self.db.pose_data
+        # 2. How to call pose data?
+        pose_data = self.db.pose_data [x, y, yaw(degree)]
 
-        # Add other functions or algorithm
-        self.example_function()
+        # 3. How to get info of traffic light?
+        traffic_light = self.db.traffic_light
+        remaining_time = self.db.traffic_remaining_time
 
         # finally derive the angle & speed of a car
         return angle, speed
         '''
         lidar_data = self.db.lidar_data
         pose_data = self.db.pose_data
-        
+        traffic_light = self.db.traffic_light
+        remaining_time = self.db.traffic_remaining_time
+
+        # Print for debugging
+        print(traffic_light, remaining_time)
+
+        # Determine the angle & speed
         angle = 0
         speed = 0
-
+        # Return angle & speed
         return angle, speed
 
 

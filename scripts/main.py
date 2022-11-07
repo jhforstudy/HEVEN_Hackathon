@@ -44,10 +44,8 @@ def main():
     db = Database(lidar=True)
     brain = Brain(db)
     # Initialize ROS rate & motor publisher
-    rate = rospy.Rate(10)
+    rate = rospy.Rate(param.thread_rate)
     control_pub = rospy.Publisher('drive', AckermannDrive, queue_size=1)
-    # TF listener
-    listener = tf.TransformListener()
     rospy.loginfo("Start autonomous driving---\n\n\n")
     time.sleep(1)
 
