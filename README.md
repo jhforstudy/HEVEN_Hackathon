@@ -7,12 +7,20 @@
 - 내용 : 4인 1팀이 되어 주어진 map 상에서 자율주행 및 주차, 정지선 알고리즘 구현
 
 ## 설치
-### Docker를 이용한 개발 환경 구성 (Recommended)
+### 1. Docker를 이용한 개발 환경 구성 (Recommended)
 
 Windows 환경에서도 다음의 링크를 참고하여 편하게 개발할 수 있습니다.
-[Docker 환경 구성](https://github.com/jhforstudy/HEVEN_Hackathon/blob/master/InstallDocker.md)
+[Docker 환경 설치하기](https://github.com/jhforstudy/HEVEN_Hackathon/blob/master/InstallDocker.md)
 
-### Ubuntu에 패키지 직접 설치
+### 2. Ubuntu에 패키지 직접 설치
+
+* Ubuntu 18.04 멀티부팅 설치
+
+https://jimnong.tistory.com/676
+
+* ROS 설치 (상단의 *"melodic"* 클릭 후 진행)
+
+http://wiki.ros.org/Installation/Ubuntu
 
 * Dependencies 설치
 
@@ -20,9 +28,14 @@ Windows 환경에서도 다음의 링크를 참고하여 편하게 개발할 수
     sudo apt-get install ros-melodic-tf2-geometry-msgs ros-melodic-ackermann-msgs ros-melodic-joy ros-melodic-map-server
     ```
 
+* ROS용 워크스페이스 생성
+    ```
+    mkdir catkin_ws && cd catkin_ws
+    mkdir src && cd src
+    ```
+    
 * 레포지토리 복제
     ```
-    cd ~/catkin_ws/src
     git clone https://github.com/jhforstudy/HEVEN_Hackathon.git
     ```
 
