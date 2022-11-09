@@ -268,13 +268,88 @@ def MakeParkinglotMarker():
     parking_lot_4.pose.position.x = param.PARKING_LOT_X_4
     parking_lot_4.pose.position.y = param.PARKING_LOT_Y_4
 
+    parking_arrow_1 = Marker()
+    parking_arrow_2 = Marker()
+
     if param.map_3_parking_first_dir == 1:
+        parking_arrow_1.header.frame_id = "map"
+        parking_arrow_1.ns = "arrow_1"
+        parking_arrow_1.type = Marker.ARROW
+        parking_arrow_1.action = Marker.ADD
+        parking_arrow_1.color.r, parking_arrow_1.color.g, parking_arrow_1.color.b = 0, 0, 1
+        parking_arrow_1.color.a = 1
+        parking_arrow_1.scale.x = 1
+        parking_arrow_1.scale.y = 0.1
+        parking_arrow_1.scale.z = 0.1
+        parking_arrow_1.pose.position.x = param.PARKING_LOT_X_1
+        parking_arrow_1.pose.position.y = param.PARKING_LOT_Y_1
+        parking_arrow_1.pose.position.z = 0
+        arrow_degree_1 = param.PARKING_LOT_YAW_1 * pi / 180
+        qu_x, qu_y, qu_z, qu_w = quaternion_from_euler(0,0,arrow_degree_1)
+        parking_arrow_1.pose.orientation.x = qu_x
+        parking_arrow_1.pose.orientation.y = qu_y
+        parking_arrow_1.pose.orientation.z = qu_z
+        parking_arrow_1.pose.orientation.w = qu_w
         parking_lot_1.color.r, parking_lot_1.color.g, parking_lot_1.color.b = 0, 1, 0
     elif param.map_3_parking_first_dir == 2:
+        parking_arrow_1.header.frame_id = "map"
+        parking_arrow_1.ns = "arrow_1"
+        parking_arrow_1.type = Marker.ARROW
+        parking_arrow_1.action = Marker.ADD
+        parking_arrow_1.color.r, parking_arrow_1.color.g, parking_arrow_1.color.b = 0, 0, 1
+        parking_arrow_1.color.a = 1
+        parking_arrow_1.scale.x = 1
+        parking_arrow_1.scale.y = 0.1
+        parking_arrow_1.scale.z = 0.1
+        parking_arrow_1.pose.position.x = param.PARKING_LOT_X_2
+        parking_arrow_1.pose.position.y = param.PARKING_LOT_Y_2
+        parking_arrow_1.pose.position.z = 0
+        arrow_degree_2 = param.PARKING_LOT_YAW_2 * pi / 180
+        qu_x, qu_y, qu_z, qu_w = quaternion_from_euler(0,0,arrow_degree_2)
+        parking_arrow_1.pose.orientation.x = qu_x
+        parking_arrow_1.pose.orientation.y = qu_y
+        parking_arrow_1.pose.orientation.z = qu_z
+        parking_arrow_1.pose.orientation.w = qu_w
         parking_lot_2.color.r, parking_lot_2.color.g, parking_lot_2.color.b = 0, 1, 0
     elif param.map_3_parking_first_dir == 3:
+        parking_arrow_1.header.frame_id = "map"
+        parking_arrow_1.ns = "arrow_1"
+        parking_arrow_1.type = Marker.ARROW
+        parking_arrow_1.action = Marker.ADD
+        parking_arrow_1.color.r, parking_arrow_1.color.g, parking_arrow_1.color.b = 0, 0, 1
+        parking_arrow_1.color.a = 1
+        parking_arrow_1.scale.x = 1
+        parking_arrow_1.scale.y = 0.1
+        parking_arrow_1.scale.z = 0.1
+        parking_arrow_1.pose.position.x = param.PARKING_LOT_X_3
+        parking_arrow_1.pose.position.y = param.PARKING_LOT_Y_3
+        parking_arrow_1.pose.position.z = 0
+        arrow_degree_3 = param.PARKING_LOT_YAW_3 * pi / 180
+        qu_x, qu_y, qu_z, qu_w = quaternion_from_euler(0,0,arrow_degree_3)
+        parking_arrow_1.pose.orientation.x = qu_x
+        parking_arrow_1.pose.orientation.y = qu_y
+        parking_arrow_1.pose.orientation.z = qu_z
+        parking_arrow_1.pose.orientation.w = qu_w
         parking_lot_3.color.r, parking_lot_3.color.g, parking_lot_3.color.b = 0, 1, 0
     elif param.map_3_parking_first_dir == 4:
+        parking_arrow_1.header.frame_id = "map"
+        parking_arrow_1.ns = "arrow_1"
+        parking_arrow_1.type = Marker.ARROW
+        parking_arrow_1.action = Marker.ADD
+        parking_arrow_1.color.r, parking_arrow_1.color.g, parking_arrow_1.color.b = 0, 0, 1
+        parking_arrow_1.color.a = 1
+        parking_arrow_1.scale.x = 1
+        parking_arrow_1.scale.y = 0.1
+        parking_arrow_1.scale.z = 0.1
+        parking_arrow_1.pose.position.x = param.PARKING_LOT_X_4
+        parking_arrow_1.pose.position.y = param.PARKING_LOT_Y_4
+        parking_arrow_1.pose.position.z = 0
+        arrow_degree_4 = param.PARKING_LOT_YAW_4 * pi / 180
+        qu_x, qu_y, qu_z, qu_w = quaternion_from_euler(0,0,arrow_degree_4)
+        parking_arrow_1.pose.orientation.x = qu_x
+        parking_arrow_1.pose.orientation.y = qu_y
+        parking_arrow_1.pose.orientation.z = qu_z
+        parking_arrow_1.pose.orientation.w = qu_w
         parking_lot_4.color.r, parking_lot_4.color.g, parking_lot_4.color.b = 0, 1, 0
 
     tilt_degree = param.PARKING_LOT_TILT_DEGREE * pi / 180
@@ -322,15 +397,87 @@ def MakeParkinglotMarker():
     parking_lot_8.pose.orientation.w = qu_w
 
     if param.map_3_parking_second_dir == 5:
+        parking_arrow_2.header.frame_id = "map"
+        parking_arrow_2.ns = "arrow_2"
+        parking_arrow_2.type = Marker.ARROW
+        parking_arrow_2.action = Marker.ADD
+        parking_arrow_2.color.r, parking_arrow_2.color.g, parking_arrow_2.color.b = 0, 0, 1
+        parking_arrow_2.color.a = 1
+        parking_arrow_2.scale.x = 1
+        parking_arrow_2.scale.y = 0.1
+        parking_arrow_2.scale.z = 0.1
+        parking_arrow_2.pose.position.x = param.PARKING_LOT_X_5
+        parking_arrow_2.pose.position.y = param.PARKING_LOT_Y_5
+        parking_arrow_2.pose.position.z = 0
+        arrow_degree_1 = param.PARKING_LOT_YAW_5 * pi / 180
+        qu_x, qu_y, qu_z, qu_w = quaternion_from_euler(0,0,arrow_degree_1)
+        parking_arrow_2.pose.orientation.x = qu_x
+        parking_arrow_2.pose.orientation.y = qu_y
+        parking_arrow_2.pose.orientation.z = qu_z
+        parking_arrow_2.pose.orientation.w = qu_w
         parking_lot_5.color.r, parking_lot_5.color.g, parking_lot_5.color.b = 0, 1, 0
     elif param.map_3_parking_second_dir == 6:
+        parking_arrow_2.header.frame_id = "map"
+        parking_arrow_2.ns = "arrow_2"
+        parking_arrow_2.type = Marker.ARROW
+        parking_arrow_2.action = Marker.ADD
+        parking_arrow_2.color.r, parking_arrow_2.color.g, parking_arrow_2.color.b = 0, 0, 1
+        parking_arrow_2.color.a = 1
+        parking_arrow_2.scale.x = 1
+        parking_arrow_2.scale.y = 0.1
+        parking_arrow_2.scale.z = 0.1
+        parking_arrow_2.pose.position.x = param.PARKING_LOT_X_6
+        parking_arrow_2.pose.position.y = param.PARKING_LOT_Y_6
+        parking_arrow_2.pose.position.z = 0
+        arrow_degree_1 = param.PARKING_LOT_YAW_6 * pi / 180
+        qu_x, qu_y, qu_z, qu_w = quaternion_from_euler(0,0,arrow_degree_1)
+        parking_arrow_2.pose.orientation.x = qu_x
+        parking_arrow_2.pose.orientation.y = qu_y
+        parking_arrow_2.pose.orientation.z = qu_z
+        parking_arrow_2.pose.orientation.w = qu_w
         parking_lot_6.color.r, parking_lot_6.color.g, parking_lot_6.color.b = 0, 1, 0
     elif param.map_3_parking_second_dir == 7:
+        parking_arrow_2.header.frame_id = "map"
+        parking_arrow_2.ns = "arrow_2"
+        parking_arrow_2.type = Marker.ARROW
+        parking_arrow_2.action = Marker.ADD
+        parking_arrow_2.color.r, parking_arrow_2.color.g, parking_arrow_2.color.b = 0, 0, 1
+        parking_arrow_2.color.a = 1
+        parking_arrow_2.scale.x = 1
+        parking_arrow_2.scale.y = 0.1
+        parking_arrow_2.scale.z = 0.1
+        parking_arrow_2.pose.position.x = param.PARKING_LOT_X_7
+        parking_arrow_2.pose.position.y = param.PARKING_LOT_Y_7
+        parking_arrow_2.pose.position.z = 0
+        arrow_degree_1 = param.PARKING_LOT_YAW_7 * pi / 180
+        qu_x, qu_y, qu_z, qu_w = quaternion_from_euler(0,0,arrow_degree_1)
+        parking_arrow_2.pose.orientation.x = qu_x
+        parking_arrow_2.pose.orientation.y = qu_y
+        parking_arrow_2.pose.orientation.z = qu_z
+        parking_arrow_2.pose.orientation.w = qu_w
         parking_lot_7.color.r, parking_lot_7.color.g, parking_lot_7.color.b = 0, 1, 0
     elif param.map_3_parking_second_dir == 8:
+        parking_arrow_2.header.frame_id = "map"
+        parking_arrow_2.ns = "arrow_2"
+        parking_arrow_2.type = Marker.ARROW
+        parking_arrow_2.action = Marker.ADD
+        parking_arrow_2.color.r, parking_arrow_2.color.g, parking_arrow_2.color.b = 0, 0, 1
+        parking_arrow_2.color.a = 1
+        parking_arrow_2.scale.x = 1
+        parking_arrow_2.scale.y = 0.1
+        parking_arrow_2.scale.z = 0.1
+        parking_arrow_2.pose.position.x = param.PARKING_LOT_X_8
+        parking_arrow_2.pose.position.y = param.PARKING_LOT_Y_8
+        parking_arrow_2.pose.position.z = 0
+        arrow_degree_1 = param.PARKING_LOT_YAW_8 * pi / 180
+        qu_x, qu_y, qu_z, qu_w = quaternion_from_euler(0,0,arrow_degree_1)
+        parking_arrow_2.pose.orientation.x = qu_x
+        parking_arrow_2.pose.orientation.y = qu_y
+        parking_arrow_2.pose.orientation.z = qu_z
+        parking_arrow_2.pose.orientation.w = qu_w
         parking_lot_8.color.r, parking_lot_8.color.g, parking_lot_8.color.b = 0, 1, 0
 
-    return parking_lot_1, parking_lot_2, parking_lot_3, parking_lot_4, parking_lot_5, parking_lot_6, parking_lot_7, parking_lot_8
+    return parking_lot_1, parking_lot_2, parking_lot_3, parking_lot_4, parking_lot_5, parking_lot_6, parking_lot_7, parking_lot_8, parking_arrow_1, parking_arrow_2
 
 if __name__ == "__main__":
     rospy.init_node("Visualize_node")
