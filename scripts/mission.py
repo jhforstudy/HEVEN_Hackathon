@@ -116,6 +116,7 @@ class Mission():
         self.parking_updated_2 = False
         self.stop_updated_1 = False
         self.stop_updated_2 = False
+        self.traffic_updated = False
 
         # Current goal
         self.t = None
@@ -138,7 +139,9 @@ class Mission():
 
         elif self.map_number == 2:
             self.goal_list = [
-                            Goal(mode=STOP_LINE, position=np.array((param.MAP_2_STOP_LINE_X, param.MAP_2_STOP_LINE_Y)), yaw=math.radians(90), number=1)
+                            Goal(mode=STOP_LINE, position=np.array((param.MAP_2_STOP_LINE_X, param.MAP_2_STOP_LINE_Y)), yaw=math.radians(90), number=1),
+                            Goal(mode=STOP_LINE, position=np.array((param.MAP_2_CHECK_LEFT_X, param.MAP_2_CHECK_LEFT_Y)), yaw=math.radians(180), number=2),
+                            Goal(mode=STOP_LINE, position=np.array((param.MAP_2_CHECK_RIGHT_X, param.MAP_2_CHECK_RIGHT_Y)), yaw=math.radians(0), number=3)
                             ]
         
         elif self.map_number == 3:
@@ -170,6 +173,7 @@ class Mission():
                     if self.num_passed_traffic == 1:
                         # Already Succeed
                         rospy.loginfo("Finished Traffic mission. Go ahead.")
+
                     else:
                         # Before start parking mission
                         if not self.traffic_start:
@@ -433,7 +437,7 @@ class Mission():
         
         if self.traffic_index == 0:
             # Check if a car is stopped
-            if goal.mode == STOP_LINE and self.speed == 0:
+            if goal.mode == STOP_LINE and self.speed == 0 and goal.number == 1:
                 rospy.loginfo("Stopped...")
                 self.traffic_start_time = time.time()
                 self.traffic_index += 1
@@ -462,6 +466,13 @@ class Mission():
                 self.traffic_index = 0
                 self.stop_flag = 0
 
+                if not self.traffic_updated:
+                    # Spawn index
+                    complete_msg = Complete()
+                    complete_msg.complete = True
+                    self.complete.publish(complete_msg)
+                    self.traffic_updated = True
+
             else:
                 rospy.loginfo("Trying to stop...")
             
@@ -473,6 +484,7 @@ class Mission():
             # traffic misison failed, break the function
             if traffic_spot is None:
                 self.traffic_start = False
+                self.traffic_index = 0
             # traffic mission success
             else:
                 self.traffic_index += 1
@@ -508,15 +520,19 @@ class Mission():
             self.num_passed_traffic += 1
             self.num_success_traffic += self.traffic_flag
 
-            # publish that parking mission is succeed
-            complete_msg = Complete()
-            complete_msg.complete = True
-            self.complete.publish(complete_msg)
+            if not self.traffic_updated:
+                # Spawn index
+                complete_msg = Complete()
+                complete_msg.complete = True
+                self.complete.publish(complete_msg)
+                self.traffic_updated = True
 
             # Reset the trigger
             self.traffic_start = False
             self.traffic_flag = 0
             self.traffic_success = False
+            self.traffic_updated = False
+            self.stop_index = 0
 
     def check(self, goal=Goal):
         check_flag = 0
@@ -526,8 +542,6 @@ class Mission():
                 # Check if a car is in the parking lot
                 position_diff = goal.position - self.position
                 yaw_diff = goal.yaw - math.radians(self.position_yaw)
-                # What t f?????
-                # rot_ref = goal.yaw * np.array(-position_diff)
                 if abs(position_diff[0]) <= goal.tolarance[0] and abs(position_diff[1]) <= goal.tolarance[1] and abs(yaw_diff) <= goal.tolarance[2]:
                     check_flag = 1
                 
@@ -536,18 +550,10 @@ class Mission():
                 position_diff = goal.position - self.head
                 dist = np.linalg.norm(position_diff)
 
-                left_dis = dis(self.head, np.array((param.MAP_2_CHECK_LEFT_X, param.MAP_2_CHECK_LEFT_Y)))
-                right_dis = dis(self.head, np.array((param.MAP_2_CHECK_RIGHT_X, param.MAP_2_CHECK_RIGHT_Y)))
-
-                # print(unit_vector_diff)
                 # Stop
                 if np.dot(self.head_unit_vector, -goal.unit_vector)<=0\
                     and np.dot(position_diff, -goal.unit_vector)<=0\
                     and dist <= goal.tolarance[0]:
-                    check_flag = 1
-
-                # Check if a car is in check area
-                if left_dis <= 0.5 or right_dis <= 0.5:
                     check_flag = 1
                         
             else:
