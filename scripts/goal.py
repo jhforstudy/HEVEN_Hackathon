@@ -25,9 +25,9 @@ class Goal:
     def init_tolarance(self):
         # tolerence is TBD -> according to the size of the map
         if self.mode == PARKING_SPOT:
-            self.tolarance[0] = 1 #x_tol
-            self.tolarance[1] = 1 #y_tol 
-            self.tolarance[2] = math.radians(15) #yaw_tol
+            self.tolarance[0] = 0.145 #x_tol (half of overall width)
+            self.tolarance[1] = 0.2175 #y_tol (half of overall length)
+            self.tolarance[2] = math.radians(10) #yaw_tol
 
         elif self.mode == STOP_LINE:
             self.tolarance[0] = 0.6 #distnace
