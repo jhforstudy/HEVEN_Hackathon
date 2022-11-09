@@ -184,11 +184,11 @@ if __name__ == "__main__":
                 rate.sleep()
         else:
             complete_text = "Mission Complete!"
-            complete_img = np.full(shape=(300,1300,3),fill_value=0,dtype=np.uint8)
+            complete_img = np.full(shape=(150,650,3),fill_value=0,dtype=np.uint8)
             font = cv2.FONT_HERSHEY_TRIPLEX
-            cv2.putText(complete_img, complete_text, (30, 170), font, 4, (255, 255, 255), 5)
+            cv2.putText(complete_img, complete_text, (15, 85), font, 2, (255, 255, 255), 5)
             cv2.imshow("complete_img",complete_img)
-            cv2.moveWindow('complete_img', 105, 195)
+            cv2.moveWindow('complete_img', 450, 195)
             cv2.waitKey(1)
 
             rate.sleep()
