@@ -29,23 +29,34 @@ http://wiki.ros.org/Installation/Ubuntu
     ```
 
 * ROS용 워크스페이스 생성
+
     ```
     mkdir catkin_ws && cd catkin_ws
     mkdir src && cd src
     ```
     
 * 레포지토리 복제
+
     ```
     git clone https://github.com/jhforstudy/HEVEN_Hackathon.git
     ```
 
 * 패키지 빌드
+
     ```
     cd ~/catkin_ws
     catkin_make
     source devel/setup.bash
     ```
-    
+
+## 최신 버전 업데이트
+
+* 아래 명령어를 실행하여, "Already up to date." 라는 문구가 떠야 최신 버전임
+    ```
+    cd ~/catkin_ws/src/HEVEN_Hackathon/
+    git pull
+    ```
+
 ## 실행
 
 * 시뮬레이터 실행
