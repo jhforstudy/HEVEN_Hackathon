@@ -15,6 +15,12 @@ class Brain():
     def __init__(self, db=Database, map_number=int):
         self.db = db
         self.map_number = map_number
+        self.parking_x_1 = param.parking_x_1
+        self.parking_y_1 = param.parking_y_1
+        self.parking_yaw_1 = param.parking_yaw_1
+        self.parking_x_2 = param.parking_x_2
+        self.parking_y_2 = param.parking_y_2
+        self.parking_yaw_2 = param.parking_yaw_2
     
     def main(self):
         # You can choose map number using this (1, 2, 3)
@@ -31,6 +37,11 @@ class Brain():
         # 3. How to get info of traffic light?
         traffic_light = self.db.traffic_light
         remaining_time = self.db.traffic_remaining_time
+
+        # 4. How to get the position of parking lot?
+        park_x_1 = self.parking_x_1
+        park_y_1 = self.parking_y_1
+        park_yaw_1 = self.parking_yaw_1
 
         # finally derive the angle & speed of a car
         return angle, speed
