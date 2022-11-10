@@ -121,3 +121,42 @@ http://wiki.ros.org/Installation/Ubuntu
 * 개발 시에는 원하는 맵의 번호를 직접 할당하여 테스트하면 되고, 코드 제출 시 삭제할 것.
 
 ![map_number](https://user-images.githubusercontent.com/48710703/200983738-14cd3c83-4cc9-4793-a48b-fddb10162eeb.png)
+
+
+## 시뮬레이터 사용 방법
+
+### 1. 시뮬레이터 실행
+
+* 실행해야 할 맵에 따라 `Map1.sh`, `Map2.sh`, `Map3.sh`을 더블 클릭하고,<br>
+**Execute in terminal** 클릭<br>
+![캡처3](https://user-images.githubusercontent.com/48710703/199907347-0ea16bc2-b3c3-4a2b-aaeb-b652642cb594.PNG)
+
+* 시뮬레이터 기능<br>
+① 충돌 횟수, 경과 시간 측정<br>
+② 충돌 횟수, 경과 시간, 차량 위치 초기화<br>
+③ 시뮬레이터 화면<br>
+&nbsp;&nbsp;&nbsp;&nbsp;좌클릭 - 화면 회전<br>
+&nbsp;&nbsp;&nbsp;&nbsp;우클릭 - 화면 확대<br>
+&nbsp;&nbsp;&nbsp;&nbsp;스크롤 클릭 - 화면 이동<br>
+④ 시점 설정<br>
+&nbsp;&nbsp;&nbsp;&nbsp;기본은 2D view이며 **Orbit(rviz)** 으로 변경 시 3D view 가능
+![캡처4](https://user-images.githubusercontent.com/48710703/199908144-21a49b19-d5ba-4ae3-9c8c-605305b7932b.PNG)
+
+### 2. 알고리즘 테스트
+
+* `Brain.sh`을 더블 클릭하고,<br>
+**Execute in terminal** 클릭<br>
+아래의 문구와 함께 **Brain.py**가 실행됨
+![5](https://user-images.githubusercontent.com/48710703/199909682-9c98e999-167f-4233-93a8-761018de8c94.PNG)
+                       
+### 3. 차량 수동 조작
+* `Joystick.sh`을 더블 클릭하고,<br>
+**Execute in terminal** 클릭<br>
+아래의 문구와 함께 조이스틱이 실행됨<br>
+열린 터미널을 클릭한 후,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;좌/우 화살표 - 차량 조향각 왼쪽/오른쪽 증가<br>
+&nbsp;&nbsp;&nbsp;&nbsp;상/하 화살표 - 차량 속도 높임/낮춤<br>
+&nbsp;&nbsp;&nbsp;&nbsp;스페이스 바 - 차량 정지<br>
+&nbsp;&nbsp;&nbsp;&nbsp;탭 키 - 조향각 초기화<br>
+**주의** : Brain.sh 와 따로 사용할 것
+![캡처](https://user-images.githubusercontent.com/48710703/200274414-608ace90-05d1-4a65-8747-ead89e63efd6.PNG)
