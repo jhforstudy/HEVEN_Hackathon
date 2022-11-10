@@ -11,12 +11,16 @@ from parameter_list import Param
 
 param = Param()
 
-
 class Brain():
-    def __init__(self, db=Database):
+    def __init__(self, db=Database, map_number=int):
         self.db = db
+        self.map_number = map_number
     
     def main(self):
+        # You can choose map number using this (1, 2, 3)
+        # Please erase this when you submit the code!!!
+        self.map_number = 1
+        # ===============================================
         '''
         # 1. How to call sensor data?
         lidar_data = self.db.lidar_data

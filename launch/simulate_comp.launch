@@ -1,0 +1,40 @@
+<launch>
+  <!-- Mission number -->
+  <arg name="map_number" default="1"/>
+
+  <!-- Launch a map from the maps folder-->
+  <arg name="map" default="$(find racecar_simulator)/maps/map$(arg map_number)_gs.yaml"/>
+  <node pkg="map_server" name="map_server" type="map_server" args="$(arg map)"/>
+
+  <!-- Launch the racecar model -->
+  <include file="$(find racecar_simulator)/launch/racecar_model.launch"/>
+
+  <!-- Begin the simulator with the parameters from params.yaml -->
+  <node pkg="racecar_simulator" name="racecar_simulator" type="simulate" output="screen">
+    <rosparam command="load" file="$(find racecar_simulator)/params.yaml"/>
+  </node>
+
+  <!-- Additional nodes -->
+  <!-- Check collision -->
+  <node pkg="racecar_simulator" name="check_collision" type="check_collision.py" output="screen">
+    <param name="map_number" value="$(arg map_number)"/>
+  </node>
+  <!-- Pose publisher -->
+  <node pkg="racecar_simulator" name="pose_pub" type="pose_pub.py" output="screen"/>
+  <!-- Visualize objects -->
+  <node pkg="racecar_simulator" name="visualize" type="visualize.py" output="screen">
+    <param name="map_number" value="$(arg map_number)"/>
+  </node>
+  <!-- Mission node -->
+  <node pkg="racecar_simulator" name="mission" type="mission.py" output="screen">
+    <param name="map_number" value="$(arg map_number)"/>
+  </node>
+  <!-- Rviz -->
+  <node type="rviz" name="rviz" pkg="rviz" args="-d $(find racecar_simulator)/rviz/racecar_rviz.rviz"/>
+
+  <!-- main node -->
+  <node pkg="racecar_simulator" name="main" type="main.py" output="screen">
+    <param name="map_number" value="$(arg map_number)"/>
+  </node>
+  
+</launch>

@@ -42,7 +42,8 @@ def drive(curr_angle, curr_speed):
 def main():
     # Initialize database
     db = Database(lidar=True)
-    brain = Brain(db)
+    map_number = rospy.get_param('~map_number')
+    brain = Brain(db, map_number=map_number)
     # Initialize ROS rate & motor publisher
     rate = rospy.Rate(param.thread_rate)
     control_pub = rospy.Publisher('drive', AckermannDrive, queue_size=1)

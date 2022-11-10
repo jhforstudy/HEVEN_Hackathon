@@ -601,8 +601,11 @@ class Mission():
         self.stop_index = 0
         self.parking_index = 0
         self.traffic_index = 0
-        self.parking_updated = False
-        self.stop_updated = False
+        self.parking_updated_1 = False
+        self.parking_updated_2 = False
+        self.stop_updated_1 = False
+        self.stop_updated_2 = False
+        self.traffic_updated = False
 
     def visualize_mission(self):
         # Show the status of missions
