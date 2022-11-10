@@ -81,6 +81,9 @@ http://wiki.ros.org/Installation/Ubuntu
     pose_data = self.db.pose_data
     traffic_light = self.db.traffic_light
     remaining_time = self.db.traffic_remaining_time
+    park_x_1 = self.parking_x_1
+    park_y_1 = self.parking_y_1
+    park_yaw_1 = self.parking_yaw_1
     ```
 
 * LiDAR<br>
@@ -112,6 +115,13 @@ http://wiki.ros.org/Installation/Ubuntu
     변수명 : self.db.traffic_remaining_time
     형태 : float
     값 설명 : 신호등 정보가 "STOP"일 때 남은 시간 (5.0 sec ~ 0.0 sec)
+    ```
+    
+* 주차 공간의 위치 <br>
+    ```
+    변수명 : self.parking_x_1, self.parking_y_1, self.parking_yaw_1, self.parking_x_2, self.parking_y_2, self.parking_yaw_2
+    형태 : float
+    값 설명 : 해당하는 주차 공간의 x, y 좌표 및 방향 (degree)
     ```
     
 ## 맵 번호 
