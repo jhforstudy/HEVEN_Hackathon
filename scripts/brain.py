@@ -55,6 +55,8 @@ class Brain():
         print(traffic_light, remaining_time)
 
         # Determine the angle & speed
+        # angle : 20=LEFT ~ -20=RIGHT (degree)
+        # speed : 0 ~ 4 (m/s)
         angle = 0
         speed = 0
         # Return angle & speed

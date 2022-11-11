@@ -31,7 +31,7 @@ def drive(curr_angle, curr_speed):
     '''
     
     control_msg = AckermannDrive()
-    control_msg.steering_angle = curr_angle
+    control_msg.steering_angle = curr_angle*math.pi/180
     control_msg.steering_angle_velocity = param.car_angular_velocity
     control_msg.speed = curr_speed
     control_msg.acceleration = param.car_acceleration
