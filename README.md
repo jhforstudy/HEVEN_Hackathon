@@ -61,7 +61,7 @@ http://wiki.ros.org/Installation/Ubuntu
 
 * 시뮬레이터 실행
     ```
-    roslaunch racecar_simulator simulate.launch
+    roslaunch racecar_simulator simulate.launch map_number:=1
     ```
     
 * 자율주행 main node 실행
