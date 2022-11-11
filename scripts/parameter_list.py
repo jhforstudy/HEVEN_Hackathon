@@ -1,5 +1,11 @@
 from visualization_msgs.msg import Marker, MarkerArray
 
+# (Map 2) You can change the direction of traffic
+TRAFFIC_DIR = "LEFT"       # "LEFT", "RIGHT"
+# (Map 3) You can change the position of parking lot
+PARK_NUM_1 = 2      # 1, 2, 3, 4
+PARK_NUM_2 = 6      # 5, 6, 7, 8
+
 class Param():
     def __init__(self):
         # Information of a car
@@ -23,7 +29,7 @@ class Param():
         
         self.STOP_LINE_TIME = 5
         # Direction of traffic in MAP 2 ("LEFT" or "RIGHT")
-        self.map_2_traffic_dir = "RIGHT"
+        self.map_2_traffic_dir = TRAFFIC_DIR
 
         # Center of stop line
         self.MAP_2_STOP_LINE_X = -4
@@ -36,9 +42,9 @@ class Param():
         self.MAP_2_CHECK_RIGHT_Y = -15.87
 
         # Direction of first parking mission in MAP 3 (1 or 2 or 3 or 4)
-        self.map_3_parking_first_dir = 4
+        self.map_3_parking_first_dir = PARK_NUM_1
         # Direction of second parking mission in MAP 3 (5 or 6 or 7 or 8)
-        self.map_3_parking_second_dir = 7
+        self.map_3_parking_second_dir = PARK_NUM_2
 
         # Size of parking lot
         self.PARKING_LOT_WIDTH = 0.55
@@ -87,6 +93,40 @@ class Param():
         self.MAP_3_STOP_LINE_X_2 = 26.236
         self.MAP_3_STOP_LINE_Y_2 = -51.142
         self.MAP_3_STOP_LINE_YAW_2 = -90
+
+        if self.map_3_parking_first_dir == 1:
+            self.parking_x_1 = self.PARKING_LOT_X_1
+            self.parking_y_1 = self.PARKING_LOT_Y_1
+            self.parking_yaw_1 = self.PARKING_LOT_YAW_1
+        elif self.map_3_parking_first_dir == 2:
+            self.parking_x_1 = self.PARKING_LOT_X_2
+            self.parking_y_1 = self.PARKING_LOT_Y_2
+            self.parking_yaw_1 = self.PARKING_LOT_YAW_2
+        elif self.map_3_parking_first_dir == 3:
+            self.parking_x_1 = self.PARKING_LOT_X_3
+            self.parking_y_1 = self.PARKING_LOT_Y_3
+            self.parking_yaw_1 = self.PARKING_LOT_YAW_3
+        elif self.map_3_parking_first_dir == 4:
+            self.parking_x_1 = self.PARKING_LOT_X_4
+            self.parking_y_1 = self.PARKING_LOT_Y_4
+            self.parking_yaw_1 = self.PARKING_LOT_YAW_4
+
+        if self.map_3_parking_second_dir == 5:
+            self.parking_x_2 = self.PARKING_LOT_X_5
+            self.parking_y_2 = self.PARKING_LOT_Y_5
+            self.parking_yaw_2 = self.PARKING_LOT_YAW_5
+        elif self.map_3_parking_second_dir == 6:
+            self.parking_x_2 = self.PARKING_LOT_X_6
+            self.parking_y_2 = self.PARKING_LOT_Y_6
+            self.parking_yaw_2 = self.PARKING_LOT_YAW_6
+        elif self.map_3_parking_second_dir == 7:
+            self.parking_x_2 = self.PARKING_LOT_X_7
+            self.parking_y_2 = self.PARKING_LOT_Y_7
+            self.parking_yaw_2 = self.PARKING_LOT_YAW_7
+        elif self.map_3_parking_second_dir == 8:
+            self.parking_x_2 = self.PARKING_LOT_X_8
+            self.parking_y_2 = self.PARKING_LOT_Y_8
+            self.parking_yaw_2 = self.PARKING_LOT_YAW_8
 
         # Spawn lists (x, y, yaw - degree)
         self.MAP_1_SPAWN_POINT = [(0,0,0)]

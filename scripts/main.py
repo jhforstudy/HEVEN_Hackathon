@@ -42,7 +42,7 @@ def drive(curr_angle, curr_speed):
 def main():
     # Initialize database
     db = Database(lidar=True)
-    map_number = rospy.get_param('~map_number')
+    map_number = rospy.get_param('~map_number', 1)
     brain = Brain(db, map_number=map_number)
     # Initialize ROS rate & motor publisher
     rate = rospy.Rate(param.thread_rate)
