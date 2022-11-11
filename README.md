@@ -190,3 +190,13 @@ PARK_NUM_2 = 5      # 5, 6, 7, 8
 ```
 
 * 변경사항 저장 후, ``Map1.sh``, ``Map2.sh``, ``Map3.sh``를 다시 실행할 것!
+
+### 5. 차량 자율주행 제어 방법
+* `Brain.py` 의 main 함수에서 ``angle``, ``speed`` 를 결정하여 return하면 그에 맞게 차량이 움직임
+
+* ``angle``, ``speed``는 다음과 같이 결정하면 됨
+
+```python
+angle = 0   # 20(LEFT) ~ -20(RIGHT), degree
+speed = 1   # 0 ~ 4, m/s
+```
