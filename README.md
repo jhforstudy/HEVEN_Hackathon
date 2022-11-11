@@ -170,3 +170,23 @@ http://wiki.ros.org/Installation/Ubuntu
 &nbsp;&nbsp;&nbsp;&nbsp;탭 키 - 조향각 초기화<br>
 **주의** : Brain.sh 와 따로 사용할 것
 ![캡처](https://user-images.githubusercontent.com/48710703/200274414-608ace90-05d1-4a65-8747-ead89e63efd6.PNG)
+
+### 4. 신호등 방향 및 주차 공간 위치 변경
+
+* 대회 진행 시, 신호등 방향과 주차 공간을 랜덤하게 선택하여 진행할 예정
+(모든 팀이 동일한 방향으로)
+
+* `parameter_list.py` 의 윗 부분을 수정하면 Map의 정보를 변경하여 테스트할 수 있음.
+
+```python
+from visualization_msgs.msg import Marker, MarkerArray
+
+# (Map 2) You can change the direction of traffic
+TRAFFIC_DIR = "LEFT"       # "LEFT", "RIGHT"
+# (Map 3) You can change the position of parking lot
+PARK_NUM_1 = 3      # 1, 2, 3, 4
+PARK_NUM_2 = 5      # 5, 6, 7, 8
+...
+```
+
+* 변경사항 저장 후, ``Map1.sh``, ``Map2.sh``, ``Map3.sh``를 다시 실행할 것!
